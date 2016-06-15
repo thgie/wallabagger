@@ -1,0 +1,33 @@
+{
+  "name": "wallabagger",
+  "version": "1.0.2-react",
+  "description": "chrome extension for wallabag v.2 service",
+  "main": "./js/bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --progress -d && http-server.cmd . -o \"C:\\Users\\yevdokimov\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome.exe\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rurik19/wallabagger.git"
+  },
+  "keywords": [
+    "wallabag",
+    "read-it-later",
+    "chrome"
+  ],
+  "author": "Yuriy Evdokimov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Rurik19/wallabagger/issues"
+  },
+  "homepage": "https://github.com/Rurik19/wallabagger#readme",
+  "dependencies": {
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0"
+  },
+  "devDependencies": {
+    "source-map-loader": "^0.1.5",
+    "ts-loader": "^0.8.2"
+  }
+}
