@@ -5,6 +5,7 @@
   "main": "./js/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --progress -d",
     "start": "webpack --progress -d && http-server.cmd . -o \"C:\\Users\\yevdokimov\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome.exe\""
   },
   "repository": {

@@ -53,7 +53,7 @@ WallabagApi.prototype = {
     checkParams: function(){
             return ( (this.data.ClientId != '') && 
                  (this.data.ClientSecret != '') && 
-                 (this.data.userLogin != '') && 
+                 (this.data.UserLogin != '') && 
                  (this.data.UserPassword != '') ) ;
     },
 
