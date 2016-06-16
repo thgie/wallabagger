@@ -22,7 +22,7 @@ let apiAuthorised = setup.load().then( (data: IWallabagSetup) => {
             <Toast toastText="Obtaining wallabag api token" toastType={ToastType.info}/>,
             document.getElementById("react-container")
         );
-        return api.GetAppToken();
+        return api.getAppToken();
     }
     return "OK";
 }).catch(error => {
