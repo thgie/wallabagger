@@ -23,6 +23,8 @@ var OptionsController = function () {
 
     //   this.tokenExpiresInput = document.getElementById("tokenexpired-input");
 
+   this.saveToFileButton = document.getElementById("saveToFile-button");
+
     this.addListeners_();
 
 };
@@ -44,6 +46,7 @@ OptionsController.prototype = {
     userLogin_: null,
     userPassword_: null,
     getAppTokenButton_: null,
+    saveToFileButton: null,
     //    appTokenInput_: null,
     tokenLabel_: null,
     //    checkTokenButton_: null,
@@ -58,10 +61,30 @@ OptionsController.prototype = {
         // this.savebutton_.addEventListener('click', this.saveClick_.bind(this));
         this.checkurlbutton_.addEventListener('click', this.checkUrlClick.bind(this));
         this.getAppTokenButton_.addEventListener('click', this.getAppTokenClick.bind(this));
+        this.saveToFileButton.addEventListener('click', this.saveToFileClick.bind(this));
         //      this.checkTokenButton_.addEventListener('click', this.checkTokenClick.bind(this));
         //      this.refreshTokenButton_.addEventListener('click', this.refreshTokenClick.bind(this));
     },
 
+    saveToFileClick: function(){
+        //window.open(`data:text/json;charset=utf-8,${JSON.stringify(this.api.data)}`);
+
+
+            var textToSave = JSON.stringify(this.api.data);
+            var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+            var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+            var fileNameToSaveAs = "wallabag.json";
+        
+            var downloadLink = document.createElement("a");
+            downloadLink.download = fileNameToSaveAs;
+            downloadLink.innerHTML = "Download File";
+            downloadLink.href = textToSaveAsURL;
+            downloadLink.onclick = (event)=>{ document.body.removeChild(event.target); };
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+
+    },
     // refreshTokenClick: function (e) {
     //     e.preventDefault();
 

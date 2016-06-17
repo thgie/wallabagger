@@ -9,6 +9,17 @@ import { WallabagApi } from "./wallabag-api";
 let setup: WallabagSetup = new WallabagSetup(WallabagSetupStorageType.ChromeStorage);
 let api: WallabagApi ;
 
+let activeTab = () => new Promise((resolve, reject) => {
+    chrome.tabs.query({ "active": true, "currentWindow": true }, function (tabs) {
+        if (tabs[0] != null) {
+            return resolve(tabs[0]);
+        }
+        else {
+            return reject("active tab not found");
+        }
+    });
+});
+
 ReactDOM.render(
     <Toast toastText="Loading wallabag API" toastType={ToastType.info}/>,
     document.getElementById("react-container")
@@ -32,3 +43,5 @@ let apiAuthorised = setup.load().then( (data: IWallabagSetup) => {
     );
     console.error(error);
 });
+
+
