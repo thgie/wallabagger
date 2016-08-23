@@ -7,16 +7,16 @@ import Picture from "./Picture";
 import Title from "./Title";
 import { TitleEdit } from "./TitleEdit";
 import Domain from "./Domain";
-import Icon from "./Icon";
+import { Icon, EditIcon, ArchiveIcon, StarredIcon, TrashIcon, HelpIcon } from "./Icons";
 import Tags from "./Tags";
-import { Card, CardFooter, Right, ShiftDown } from "./helpers";
+import { Card, CardFooter, Right, ShiftDown, Tooltip } from "./helpers";
 import { toggleEditMode,
          setTitle,
          toggleStarred,
          toggleArchived,
          toggleHelpMode,
-         deleteArticle,
-         Tooltip } from "../actions";
+         deleteArticle
+          } from "../actions";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -58,11 +58,11 @@ const Article = ({
     <CardFooter>
         <Domain domainName = { article.domain_name } />
         <Right><ShiftDown>
-            <Icon iconName="icon-pencil" onClick={ onEditClick }/>
-            <Icon iconName={ article.is_archived === 1 ? "icon-checkmark" :"icon-checkmark2" }  onClick ={ onArchivedClick }/>
-            <Icon iconName={ article.is_starred === 1 ? "icon-star" :"icon-star2" } onClick ={ onStarredClick }/>
-            <Icon iconName="icon-bin" onClick={ onDeleteClick }/>
-            <Icon iconName={ helpMode ? "icon-help2" : "icon-help" } onClick ={ onHelpClick }/>
+            <EditIcon onClick={ onEditClick }/>
+            <ArchiveIcon checked={ article.is_archived === 1 }  onClick ={ onArchivedClick }/>
+            <StarredIcon checked={ article.is_starred === 1 } onClick ={ onStarredClick }/>
+            <TrashIcon onClick={ onDeleteClick }/>
+            <HelpIcon checked={ helpMode } onClick ={ onHelpClick }/>
         </ShiftDown></Right>
     </CardFooter>
     <CardFooter>

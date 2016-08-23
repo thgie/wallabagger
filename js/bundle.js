@@ -5622,7 +5622,7 @@
 	        return this.patchArticle(articleId, { starred: articleStarred ? 1 : 0 });
 	    }
 	    saveArchived(articleId, articleArchived) {
-	        return this.patchArticle(articleId, { archived: articleArchived ? 1 : 0 });
+	        return this.patchArticle(articleId, { archive: articleArchived ? 1 : 0 });
 	    }
 	    saveTags(articleId, taglist) {
 	        return this.patchArticle(articleId, { tags: taglist.map(tag => tag.label).join(",") });
@@ -7896,8 +7896,7 @@
 	};
 	const Article = ({ article = null, editMode = false, helpMode = false, onEditClick = null, onCancelClick = null, onSaveClick = null, onStarredClick = null, onArchivedClick = null, onDeleteClick = null, onHelpClick = null }) => React.createElement(helpers_1.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), editMode
 	    ? React.createElement(TitleEdit_1.TitleEdit, {title: article.title, Save: onSaveClick, Cancel: onCancelClick})
-	    : helpMode ? React.createElement(actions_1.Tooltip, {tooltip: "Click to open saved article"}, React.createElement(Title_1.default, {title: article.title}))
-	        : React.createElement(Title_1.default, {title: article.title}), React.createElement(helpers_1.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(helpers_1.Right, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icon_1.default, {iconName: "icon-pencil", onClick: onEditClick}), React.createElement(Icon_1.default, {iconName: article.is_archived === 1 ? "icon-checkmark" : "icon-checkmark2", onClick: onArchivedClick}), React.createElement(Icon_1.default, {iconName: article.is_starred === 1 ? "icon-star" : "icon-star2", onClick: onStarredClick}), React.createElement(Icon_1.default, {iconName: "icon-bin", onClick: onDeleteClick}), React.createElement(Icon_1.default, {iconName: helpMode ? "icon-help2" : "icon-help", onClick: onHelpClick})))), React.createElement(helpers_1.CardFooter, null, React.createElement(Tags_1.default, {articleTags: article.tags, foundTags: []})));
+	    : React.createElement(Title_1.default, {title: article.title, helpMode: helpMode}), React.createElement(helpers_1.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(helpers_1.Right, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icon_1.default, {iconName: "icon-pencil", onClick: onEditClick}), React.createElement(Icon_1.default, {iconName: article.is_archived === 1 ? "icon-checkmark" : "icon-checkmark2", onClick: onArchivedClick}), React.createElement(Icon_1.default, {iconName: article.is_starred === 1 ? "icon-star2" : "icon-star", onClick: onStarredClick}), React.createElement(Icon_1.default, {iconName: "icon-bin", onClick: onDeleteClick}), React.createElement(Icon_1.default, {iconName: helpMode ? "icon-help2" : "icon-help", onClick: onHelpClick})))), React.createElement(helpers_1.CardFooter, null, React.createElement(Tags_1.default, {articleTags: article.tags, foundTags: []})));
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(Article);
 
@@ -8026,7 +8025,9 @@
 	///<reference path="../../typings/index.d.ts" />
 	const React = __webpack_require__(/*! react */ 1);
 	const helpers_1 = __webpack_require__(/*! ./helpers */ 42);
-	const Title = ({ title = "test title" }) => React.createElement(helpers_1.CardHeader, null, React.createElement(helpers_1.Clickable, null, React.createElement(helpers_1.BigBlue, null, title)));
+	const Title = ({ title = "test title", helpMode = false }) => helpMode
+	    ? React.createElement(helpers_1.CardHeader, null, React.createElement(helpers_1.Clickable, null, React.createElement(helpers_1.BigBlue, null, React.createElement(helpers_1.Tooltip, {tooltip: "Click to open saved article"}, title))))
+	    : React.createElement(helpers_1.CardHeader, null, React.createElement(helpers_1.Clickable, null, React.createElement(helpers_1.BigBlue, null, title)));
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = Title;
 

@@ -116,7 +116,7 @@ export class WallabagApi {
 
     saveArchived(articleId: number, articleArchived: boolean): Promise<any> {
 
-        return this.patchArticle(articleId, { archived: articleArchived ? 1 : 0 });
+        return this.patchArticle(articleId, { archive: articleArchived ? 1 : 0 });
 
     }
 

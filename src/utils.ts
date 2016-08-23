@@ -3,7 +3,7 @@ import { Iterable } from "immutable";
 export const isDebug: boolean = true;
 
 export const isExtension = (): boolean => (window.chrome.extension !== undefined);
-const testUrl: string = "https://habrahabr.ru/company/intel/blog/283066";
+const testUrl: string = "https://habrahabr.ru/company/intel/blog/283066/";
 
 let activeChromeTab = (): Promise<string> => new Promise<string>((resolve, reject) => {
     chrome.tabs.query({ "active": true, "currentWindow": true }, function (tabs) {
