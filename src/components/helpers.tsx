@@ -35,7 +35,7 @@ export const Input = ({ placeholder = "" }) => <input className="form-input" typ
 export const Text = ({ value = "", onChange = null } ) => <textarea className="form-input" rows="3" value={value} onChange={ onChange }></textarea>;
 
 export const ButtonLink = ({ children = null, onClick = null }) => <button className="btn btn-link"  onClick = { onClick }>{ children }</button>;
-export const Chip = ({ children = null }) => <div class="chip-sm"><span className="chip-name">{children}</span></div>;
+export const Chip = ({ children = null }) => <span className="chip-sm"><span className="chip-name">{children}</span></span>;
 export const Cross = () => <button className="btn btn-clear"></button>;
 
 export const Tooltip =  ({ children = null, tooltip = "" }) => <span className="tooltip"data-tooltip={tooltip} >{ children }</span>;

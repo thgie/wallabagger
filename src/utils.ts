@@ -32,31 +32,3 @@ export function getUrlToSaveSync(): string {
     });
     } else { return testUrl; };
 }
-/**
- * Returns whether the provided value is a promise
- *
- * @param {object} value Potential promise
- * @return {Boolean}
- */
-export function isPromise(value: any) {
-  if (value !== null && typeof value === "object") {
-    return value.promise && typeof value.promise.then === "function";
-  }
-}
-
-/**
- * [immutableToJS
- *    converts properties of the provided [state] object from immutable
- *    data structures to regular JavaScript data structures - used with
- *    redux-logger
- *
- * @param  {object} state [state reference]
- * @return {object}       [transformed state]
- */
-export  function immutableToJS(state: any) {
-  return Object.keys(state).reduce((newState: any, key: any) => {
-    const val = state[key];
-    newState[key] = Iterable.isIterable(val) ? val.toJS() : val;
-    return newState;
-  }, {});
-}
