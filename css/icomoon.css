@@ -1,47 +1,68 @@
 @font-face {
-    font-family: 'icomoon';
-    src:
-        url('../fonts/icomoon.ttf?em5phz') format('truetype'),
-        url('../fonts/icomoon.woff?em5phz') format('woff'),
-        url('../fonts/icomoon.svg?em5phz#icomoon') format('svg');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'icomoon';
+  src:
+    url('../fonts/icomoon.ttf?bxa2w2') format('truetype'),
+    url('../fonts/icomoon.woff?bxa2w2') format('woff'),
+    url('../fonts/icomoon.svg?bxa2w2#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
-.icon {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icomoon' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
 
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-heart:before {
-    content: "\e900";
+.icon-star:before {
+  content: "\e900";
 }
-.icon-heart2:before {
-    content: "\e908";
-}
-.icon-pencil:before {
-    content: "\e901";
-}
-.icon-tags:before {
-    content: "\e902";
+.icon-star2:before {
+  content: "\e901";
 }
 .icon-bin:before {
-    content: "\e903";
+  content: "\e902";
+}
+.icon-bin2:before {
+  content: "\e903";
+}
+.icon-help:before {
+  content: "\e904";
+}
+.icon-help2:before {
+  content: "\e905";
+}
+.icon-pencil:before {
+  content: "\e906";
+}
+.icon-pencil2:before {
+  content: "\e907";
+}
+.icon-tag:before {
+  content: "\e908";
+}
+.icon-tag2:before {
+  content: "\e909";
+}
+.icon-tags:before {
+  content: "\e90a";
+}
+.icon-tags2:before {
+  content: "\e90b";
 }
 .icon-checkmark:before {
-    content: "\e906";
+  content: "\e90c";
 }
 .icon-checkmark2:before {
-    content: "\e907";
+  content: "\e90d";
 }
 

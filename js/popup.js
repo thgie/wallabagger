@@ -159,7 +159,7 @@ PopupController.prototype = {
              .map( e=> e.dataset.taglabel ).join(',');
      },
     
-    ClearAutocompleteList: function () {
+    clearAutocompleteList: function () {
 
         this.foundTags.length = 0;
 
@@ -191,7 +191,7 @@ PopupController.prototype = {
        
     },
     
-    TagsInputChanged: function (e) {
+    onTagsInputChanged: function (e) {
         e.preventDefault();
         
         this.ClearAutocompleteList();

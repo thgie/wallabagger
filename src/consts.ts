@@ -1,0 +1,1 @@
+export enum EAppStatus { unknown, info, error, article };

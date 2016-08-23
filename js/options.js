@@ -24,7 +24,11 @@ var OptionsController = function () {
     //   this.tokenExpiresInput = document.getElementById("tokenexpired-input");
 
    this.saveToFileButton = document.getElementById("saveToFile-button");
+   this.loadFromFileButton = document.getElementById("loadFromFile-button");
+   this.clearButton = document.getElementById("clear-button");
+   this.openFileDialog = document.getElementById("openFile-dialog");    
 
+   this.saveToLocalButton = document.getElementById("saveToLocal-button");
     this.addListeners_();
 
 };
@@ -47,6 +51,10 @@ OptionsController.prototype = {
     userPassword_: null,
     getAppTokenButton_: null,
     saveToFileButton: null,
+    loadFromFileButton: null,
+    openFileDialog: null,
+    clearButton: null,
+    saveToLocalButton: null,
     //    appTokenInput_: null,
     tokenLabel_: null,
     //    checkTokenButton_: null,
@@ -62,28 +70,56 @@ OptionsController.prototype = {
         this.checkurlbutton_.addEventListener('click', this.checkUrlClick.bind(this));
         this.getAppTokenButton_.addEventListener('click', this.getAppTokenClick.bind(this));
         this.saveToFileButton.addEventListener('click', this.saveToFileClick.bind(this));
+        this.loadFromFileButton.addEventListener('click', this.loadFromFileClick.bind(this));
+        this.clearButton.addEventListener('click', this.clearClick.bind(this));
         //      this.checkTokenButton_.addEventListener('click', this.checkTokenClick.bind(this));
         //      this.refreshTokenButton_.addEventListener('click', this.refreshTokenClick.bind(this));
+        this.saveToLocalButton.addEventListener('click', this.saveToLocal.bind(this));
+    },
+
+    saveToLocal: function(){
+        this.api.saveLocal();
+    },
+
+    clearClick: function(){
+        this.userLogin_.value = '';
+        this.userPassword_.value = '';
+        this.clientSecret_.value = '';
+        this.clientId_.value = '';
+        this.wallabagurlinput_.value  = '';
+        this.versionLabel_.innerHTML = 'http://'; 
+    },
+
+    loadFromFileClick: function(){
+        this.openFileDialog.click();
+        if (this.openFileDialog.value !==""){
+            var fileToLoad = this.openFileDialog.files[0];
+            let fileReader = new FileReader();
+            fileReader.onload = function(fileLoadedEvent) 
+            {
+                let textFromFileLoaded = fileLoadedEvent.target.result;
+                let obj = JSON.parse(textFromFileLoaded);
+                this.api.set(obj);
+                this.setFields(obj);
+            }.bind(this);
+            fileReader.readAsText(fileToLoad, "UTF-8");
+        }
     },
 
     saveToFileClick: function(){
-        //window.open(`data:text/json;charset=utf-8,${JSON.stringify(this.api.data)}`);
-
-
-            var textToSave = JSON.stringify(this.api.data);
-            var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
-            var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
-            var fileNameToSaveAs = "wallabag.json";
-        
-            var downloadLink = document.createElement("a");
-            downloadLink.download = fileNameToSaveAs;
-            downloadLink.innerHTML = "Download File";
-            downloadLink.href = textToSaveAsURL;
-            downloadLink.onclick = (event)=>{ document.body.removeChild(event.target); };
-            downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-
+        let textToSave = JSON.stringify(this.api.data);
+        let textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+        let textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+        let fileNameToSaveAs = "wallabag.json";
+    
+        let downloadLink = document.createElement("a");
+        downloadLink.download = fileNameToSaveAs;
+        downloadLink.innerHTML = "Download File";
+        downloadLink.href = textToSaveAsURL;
+        downloadLink.onclick = (event)=>{ document.body.removeChild(event.target); };
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
     },
     // refreshTokenClick: function (e) {
     //     e.preventDefault();
@@ -305,12 +341,7 @@ OptionsController.prototype = {
 
     },
 
-    init: function () {
-
-        this.api = new WallabagApi();
-
-        this.api.load().then(data => {
-
+    setFields: function (data) {
             let wburl = data.Url;
             let re = /^(http|https):\/\/(.*)/;
             if (re.test(wburl)) {
@@ -319,6 +350,9 @@ OptionsController.prototype = {
                 this.protocolLabel_.innerText = res[1] + "://";
                 this.wallabagurlinput_.value = res[2];
             };
+            if (this.wallabagurlinput_.value !=''){
+                this._show(this.tokenSection_);
+            }
             let apiv = data.ApiVersion;
             if ((apiv != '') && (apiv != null)) {
                 this.versionLabel_.innerHTML = apiv;
@@ -355,13 +389,20 @@ OptionsController.prototype = {
             }
             let expireDate = this.api.data.ExpireDateMs;
             if ((expireDate != null)) {
-                this.tokenExpiresInput.value = new Date(expireDate);
+          //      this.tokenExpiresInput.value = new Date(expireDate);
                 if (this.api.expired) {
                     this.tokenLabel_.innerHTML = "Expired"
                 }
             }
+    },
 
-        }).catch(data => { });
+    init: function () {
+
+        this.api = new WallabagApi();
+
+        this.api.load().then(data => {
+            this.setFields(data);
+             }).catch(data => { });
 
     }
 };
