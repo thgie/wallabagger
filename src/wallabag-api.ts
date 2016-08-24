@@ -126,6 +126,12 @@ export class WallabagApi {
 
     }
 
+    saveTagsStr(articleId: number, taglist: string): Promise<any> {
+
+        return this.patchArticle(articleId, { tags: taglist });
+
+    }
+
     patchArticle(articleId: number, data: Object): Promise<any> {
         let url: string = `${this.setup.Url}${entriesPath}/${articleId}${formatEnd}`;
 
@@ -181,20 +187,19 @@ export class WallabagApi {
                 ${error.message}`);  } );
         return [];
     }
-    // deleteArticleTag (articleId: number,tagid) {
 
-    //     let entryUrl = `${this.data.Url}/api/entries/${articleId}/tags/${tagid}.json`;
+    DeleteArticleTag (articleId: number, tagid: number) {
 
-    //     let rinit =  this.RequestInit("DELETE", this.AuhorizedHeader(), '');
+        const url = `${this.setup.Url}/api/entries/${articleId}/tags/${tagid}.json`;
 
-    //     return fetch( entryUrl, rinit )
-    //         .then(this._json)
-    //         .then(this._status)
-    //         .catch( error => { throw new Error(`Failed to delete article tag ${entryUrl}
-    //             ${error.message}`);  } )
-    //             ;
+        return Delete(url, this.setup.ApiToken)
+            .then((fetchData: any) => {
+                return fetchData;
+            }).catch(error => {
+                throw new Error(`Failed to delete article tag id=${articleId} tagid=${tagid} ${error.message}`);
+            });
 
-    // }
+    }
 
     // RefreshToken: function () {
 

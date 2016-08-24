@@ -96,6 +96,33 @@ export const setTitle = (title: string): any => {
     };
 };
 
+export const setTags = (tags: string): any => {
+    return (dispatch: any, getState: any) => {
+          const api = ( getState().api as WallabagApi);
+          const article = ( getState().article as IWallabagArticle);
+          api.saveTagsStr( article.id, tags)
+          .then( (article: IWallabagArticle) => {
+                     dispatch(loadArticle(article));       } )
+          .catch( (error: Error) => {
+                    dispatch(setStatus(EAppStatus.error, `Error: ${error.message}`));
+                 } );
+    };
+};
+
+export const deleteTag = (tagId: number): any => {
+    return (dispatch: any, getState: any) => {
+          const api = ( getState().api as WallabagApi);
+          const article = ( getState().article as IWallabagArticle);
+          api.DeleteArticleTag( article.id, tagId )
+          .then( (article: IWallabagArticle) => {
+                     dispatch(loadArticle(article));       } )
+          .catch( (error: Error) => {
+                    dispatch(setStatus(EAppStatus.error, `Error: ${error.message}`));
+                 } );
+    };
+};
+
+
 export const toggleStarred = (): any => {
     return (dispatch: any, getState: any) => {
           const api = ( getState().api as WallabagApi);

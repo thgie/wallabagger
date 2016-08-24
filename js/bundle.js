@@ -458,6 +458,32 @@
 	        });
 	    };
 	};
+	exports.setTags = (tags) => {
+	    return (dispatch, getState) => {
+	        const api = getState().api;
+	        const article = getState().article;
+	        api.saveTagsStr(article.id, tags)
+	            .then((article) => {
+	            dispatch(exports.loadArticle(article));
+	        })
+	            .catch((error) => {
+	            dispatch(exports.setStatus(consts_1.EAppStatus.error, `Error: ${error.message}`));
+	        });
+	    };
+	};
+	exports.deleteTag = (tagId) => {
+	    return (dispatch, getState) => {
+	        const api = getState().api;
+	        const article = getState().article;
+	        api.DeleteArticleTag(article.id, tagId)
+	            .then((article) => {
+	            dispatch(exports.loadArticle(article));
+	        })
+	            .catch((error) => {
+	            dispatch(exports.setStatus(consts_1.EAppStatus.error, `Error: ${error.message}`));
+	        });
+	    };
+	};
 	exports.toggleStarred = () => {
 	    return (dispatch, getState) => {
 	        const api = getState().api;
@@ -610,6 +636,9 @@
 	    saveTags(articleId, taglist) {
 	        return this.patchArticle(articleId, { tags: taglist.map(tag => tag.label).join(",") });
 	    }
+	    saveTagsStr(articleId, taglist) {
+	        return this.patchArticle(articleId, { tags: taglist });
+	    }
 	    patchArticle(articleId, data) {
 	        let url = `${this.setup.Url}${exports.entriesPath}/${articleId}${exports.formatEnd}`;
 	        return fetch_api_1.Patch(url, this.setup.ApiToken, data)
@@ -655,6 +684,15 @@
 	                ${error.message}`);
 	        });
 	        return [];
+	    }
+	    DeleteArticleTag(articleId, tagid) {
+	        const url = `${this.setup.Url}/api/entries/${articleId}/tags/${tagid}.json`;
+	        return fetch_api_1.Delete(url, this.setup.ApiToken)
+	            .then((fetchData) => {
+	            return fetchData;
+	        }).catch(error => {
+	            throw new Error(`Failed to delete article tag id=${articleId} tagid=${tagid} ${error.message}`);
+	        });
 	    }
 	}
 	exports.WallabagApi = WallabagApi;
@@ -2863,7 +2901,8 @@
 	    return {
 	        article: state.article,
 	        editMode: state.editMode,
-	        helpMode: state.helpMode
+	        helpMode: state.helpMode,
+	        tags: state.allTags
 	    };
 	};
 	const mapDispatchToProps = (dispatch) => {
@@ -2874,12 +2913,19 @@
 	        onStarredClick: () => { dispatch(actions_1.toggleStarred()); },
 	        onArchivedClick: () => { dispatch(actions_1.toggleArchived()); },
 	        onDeleteClick: () => { dispatch(actions_1.deleteArticle()); },
-	        onHelpClick: () => { dispatch(actions_1.toggleHelpMode()); }
+	        onHelpClick: () => { dispatch(actions_1.toggleHelpMode()); },
+	        onSaveTags: (tags) => { dispatch(actions_1.setTags(tags)); },
+	        onDeleteTag: (tagId) => { dispatch(actions_1.deleteTag(tagId)); }
 	    };
 	};
-	const Article = ({ article = null, editMode = false, helpMode = false, onEditClick = null, onCancelClick = null, onSaveClick = null, onStarredClick = null, onArchivedClick = null, onDeleteClick = null, onHelpClick = null }) => React.createElement(helpers_1.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), editMode
-	    ? React.createElement(TitleEdit_1.TitleEdit, {title: article.title, Save: onSaveClick, Cancel: onCancelClick})
-	    : React.createElement(Title_1.default, {title: article.title, helpMode: helpMode}), React.createElement(helpers_1.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(helpers_1.Right, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icons_1.EditIcon, {onClick: onEditClick}), React.createElement(Icons_1.ArchiveIcon, {checked: article.is_archived === 1, onClick: onArchivedClick}), React.createElement(Icons_1.StarredIcon, {checked: article.is_starred === 1, onClick: onStarredClick}), React.createElement(Icons_1.TrashIcon, {onClick: onDeleteClick}), React.createElement(Icons_1.HelpIcon, {checked: helpMode, onClick: onHelpClick})))), React.createElement(helpers_1.CardFooter, null, React.createElement(Tags_1.default, {articleTags: article.tags, foundTags: []})));
+	class Article extends React.Component {
+	    render() {
+	        const { article, allTags, editMode, helpMode, onSaveClick, onDeleteClick, onCancelClick, onArchivedClick, onStarredClick, onEditClick, onHelpClick, onSaveTags, onDeleteTag } = this.props;
+	        return React.createElement(helpers_1.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), editMode
+	            ? React.createElement(TitleEdit_1.TitleEdit, {title: article.title, Save: onSaveClick, Cancel: onCancelClick})
+	            : React.createElement(Title_1.default, {title: article.title, helpMode: helpMode}), React.createElement(helpers_1.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(helpers_1.Right, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icons_1.EditIcon, {onClick: onEditClick}), React.createElement(Icons_1.ArchiveIcon, {checked: article.is_archived === 1, onClick: onArchivedClick}), React.createElement(Icons_1.StarredIcon, {checked: article.is_starred === 1, onClick: onStarredClick}), React.createElement(Icons_1.TrashIcon, {onClick: onDeleteClick}), React.createElement(Icons_1.HelpIcon, {checked: helpMode, onClick: onHelpClick})))), React.createElement(helpers_1.CardFooter, null, React.createElement(Tags_1.Tags, {articleTags: article.tags, allTags: allTags, onSaveTags: onSaveTags, onDeleteTag: onDeleteTag})));
+	    }
+	}
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(Article);
 
@@ -2932,11 +2978,11 @@
 	exports.FormAutocomplete = ({ children = null }) => React.createElement("div", {className: "form-autocomplete"}, children);
 	exports.FAInput = ({ children = null }) => React.createElement("div", {className: "form-autocomplete-input"}, children);
 	exports.FAList = ({ children = null }) => React.createElement("ul", {className: "form-autocomplete-list"}, children);
-	exports.Input = ({ placeholder = "" }) => React.createElement("input", {className: "form-input", type: "text", placeholder: placeholder});
+	exports.Input = ({ placeholder = "", onChange = null, onKeyDown = null }) => React.createElement("input", {className: "form-input", type: "text", placeholder: placeholder, onChange: onChange, onKeyDown: onKeyDown});
 	exports.Text = ({ value = "", onChange = null }) => React.createElement("textarea", {className: "form-input", rows: "3", value: value, onChange: onChange});
 	exports.ButtonLink = ({ children = null, onClick = null }) => React.createElement("button", {className: "btn btn-link", onClick: onClick}, children);
 	exports.Chip = ({ children = null }) => React.createElement("span", {className: "chip-sm"}, React.createElement("span", {className: "chip-name"}, children));
-	exports.Cross = () => React.createElement("button", {className: "btn btn-clear"});
+	exports.Cross = ({ onClick = null }) => React.createElement("button", {className: "btn btn-clear", onClick: onClick});
 	exports.Tooltip = ({ children = null, tooltip = "" }) => React.createElement("span", {className: "tooltip", "data-tooltip": tooltip}, children);
 
 
@@ -3095,11 +3141,43 @@
 	const React = __webpack_require__(/*! react */ 1);
 	const Icons_1 = __webpack_require__(/*! ./Icons */ 46);
 	const helpers_1 = __webpack_require__(/*! ./helpers */ 41);
-	const Tag = ({ label = "", closable = false }) => React.createElement(helpers_1.Clickable, null, React.createElement(helpers_1.Chip, null, label, closable ? React.createElement(helpers_1.Cross, null) : null));
-	const Tags = ({ articleTags = null, foundTags = null }) => React.createElement(helpers_1.FormAutocomplete, null, React.createElement(helpers_1.FAInput, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icons_1.TagsIcon, null)), React.createElement(helpers_1.ShiftRight, null, articleTags.map(tag => React.createElement(Tag, {label: tag.label, closable: true, key: tag.id}))), React.createElement(helpers_1.Input, {placeholder: "type tags here"}), (foundTags === null) || (foundTags.length === 0) ? null :
-	    React.createElement(helpers_1.FAList, null, React.createElement(helpers_1.Grey, null, React.createElement(helpers_1.Left, null, React.createElement(helpers_1.ShiftDown, null, "Tags found: "))), foundTags.map(tag => React.createElement(Tag, {label: tag.label, closable: false, key: tag.id})))));
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Tags;
+	class Tag extends React.Component {
+	    deleteClick(e) {
+	        this.props.onDelete(this.props.tag.id);
+	    }
+	    render() {
+	        const { tag, closable } = this.props;
+	        return React.createElement(helpers_1.Clickable, null, React.createElement(helpers_1.Chip, null, tag.label, closable ? React.createElement(helpers_1.Cross, {onClick: this.deleteClick.bind(this)}) : null));
+	    }
+	}
+	class Tags extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.state = { foundTags: [], tagsSrt: props.articleTags.map(tag => tag.label).join(",") };
+	    }
+	    onchange(e) {
+	        const inputValue = e.currentTarget.value;
+	        const lastChar = inputValue.slice(-1);
+	        if ((lastChar !== ",") && (lastChar !== ";") && (lastChar !== " ")) {
+	            this.setState(Object.assign(this.state, { tagsSrt: `${this.props.articleTags.map(tag => tag.label).join(",")}${inputValue === "" ? "" : ","}${inputValue}` }));
+	        }
+	    }
+	    onkeydown(e) {
+	        const keyCode = e.keyCode;
+	        const key = e.key;
+	        if (keyCode === 32 || keyCode === 13 || key === "," || key === ";") {
+	            this.props.onSaveTags(this.state.tagsSrt);
+	        }
+	    }
+	    render() {
+	        let { foundTags } = this.state;
+	        let { articleTags, onDeleteTag } = this.props;
+	        return React.createElement(helpers_1.FormAutocomplete, null, React.createElement(helpers_1.FAInput, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icons_1.TagsIcon, null)), articleTags.map(tag => React.createElement(helpers_1.ShiftRight, {key: tag.id}, React.createElement(Tag, {tag: tag, closable: true, key: tag.id, onDelete: onDeleteTag}))), React.createElement(helpers_1.Input, {placeholder: "type tags here", onChange: this.onchange.bind(this), onKeyDown: this.onkeydown.bind(this)}), (foundTags === null) || (foundTags.length === 0) ? null :
+	            React.createElement(helpers_1.FAList, null, React.createElement(helpers_1.Grey, null, React.createElement(helpers_1.Left, null, React.createElement(helpers_1.ShiftDown, null, "Tags found: "))), foundTags.map(tag => React.createElement(Tag, {tag: tag, closable: false, key: tag.id})))));
+	    }
+	}
+	exports.Tags = Tags;
+	;
 
 
 /***/ }

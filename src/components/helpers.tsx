@@ -31,11 +31,11 @@ export const Icn = ({name = "", onClick = null}) => <span className ={ classname
 export const FormAutocomplete = ({ children = null }) => <div className="form-autocomplete">{ children }</div>;
 export const FAInput = ({ children = null }) => <div className="form-autocomplete-input">{ children }</div>;
 export const FAList = ({ children = null }) => <ul className="form-autocomplete-list">{ children }</ul>;
-export const Input = ({ placeholder = "" }) => <input className="form-input" type="text" placeholder={ placeholder }/>;
+export const Input = ({ placeholder = "", onChange = null, onKeyDown = null}) => <input className="form-input" type="text" placeholder={ placeholder } onChange = { onChange } onKeyDown={ onKeyDown }/>;
 export const Text = ({ value = "", onChange = null } ) => <textarea className="form-input" rows="3" value={value} onChange={ onChange }></textarea>;
 
 export const ButtonLink = ({ children = null, onClick = null }) => <button className="btn btn-link"  onClick = { onClick }>{ children }</button>;
 export const Chip = ({ children = null }) => <span className="chip-sm"><span className="chip-name">{children}</span></span>;
-export const Cross = () => <button className="btn btn-clear"></button>;
+export const Cross = ({ onClick = null }) => <button className="btn btn-clear" onClick={onClick}></button>;
 
 export const Tooltip =  ({ children = null, tooltip = "" }) => <span className="tooltip"data-tooltip={tooltip} >{ children }</span>;

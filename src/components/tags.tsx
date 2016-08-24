@@ -5,29 +5,78 @@ import { TagsIcon } from "./Icons";
 import { ShiftRight, ShiftDown, FormAutocomplete, FAInput, FAList, Grey, Left, Input, Clickable, Chip, Cross } from "./helpers";
 
 interface ITagProps extends React.Props<any> {
-    label: string;
+    tag: ITag;
     closable: boolean;
+    onDelete?: (tagId: number) => void;
 }
 
-const Tag = ({label = "", closable = false}: ITagProps) =>
- <Clickable>
-     <Chip>{label}{ closable ? <Cross /> : null }</Chip>
- </Clickable> ;
+class Tag extends React.Component<ITagProps, {}> {
+    deleteClick(e: MouseEvent) {
+        this.props.onDelete(this.props.tag.id);
+    }
+    render() {
+        const { tag, closable } = this.props;
+        return <Clickable>
+            <Chip>{tag.label}{ closable ? <Cross onClick={this.deleteClick.bind(this)}/> : null }</Chip>
+        </Clickable> ;
+    }
+}
+
 
 interface ITagsProps extends React.Props<any> {
     articleTags: ITag[];
+    allTags: ITag[];
+    onSaveTags: (tags: string) => void;
+    onDeleteTag: (tagId: number) => void;
+}
+
+interface ITagsState {
+    tagsSrt: string;
     foundTags: ITag[];
 }
 
-const Tags = ({ articleTags = null, foundTags = null}: ITagsProps) =>
-<FormAutocomplete><FAInput>
-        <ShiftDown><TagsIcon /></ShiftDown>
-            <ShiftRight>{ articleTags.map(tag => <Tag label={tag.label} closable={true} key={tag.id}/>)}</ShiftRight>
-        <Input placeholder="type tags here" />
-        { (foundTags === null) || ( foundTags.length === 0) ? null :
-        <FAList><Grey><Left><ShiftDown>Tags found: </ShiftDown></Left></Grey>
-           {foundTags.map(tag => <Tag label={tag.label} closable={false}  key={tag.id}/>)}
-        </FAList> }
-</FAInput></FormAutocomplete>;
+export class Tags extends React.Component<ITagsProps, ITagsState> {
 
-export default Tags;
+    constructor(props: ITagsProps) {
+        super(props);
+        this.state = {foundTags: [], tagsSrt: props.articleTags.map(tag => tag.label).join(",")};
+    }
+
+    onchange(e: Event) {
+       const inputValue = (e.currentTarget as HTMLInputElement).value ;
+       const lastChar = inputValue.slice(-1);
+       if ( (lastChar !== ",") && (lastChar !== ";") && (lastChar !== " ") ) {
+           this.setState( Object.assign(this.state,
+           { tagsSrt: `${this.props.articleTags.map(tag => tag.label).join(",")}${inputValue === "" ? "" :","}${inputValue}` }) );
+       }
+    }
+
+    onkeydown(e: KeyboardEvent) {
+        const keyCode = e.keyCode;
+        const key = e.key;
+        if (keyCode === 32 || keyCode === 13 || key === "," || key === ";") {
+            this.props.onSaveTags(this.state.tagsSrt);
+        }
+    }
+
+    render() {
+        let { foundTags } = this.state;
+        let { articleTags, onDeleteTag  } = this.props;
+        return <FormAutocomplete><FAInput>
+            <ShiftDown><TagsIcon /></ShiftDown>
+                { articleTags.map(tag => <ShiftRight key={tag.id}>
+                                            <Tag tag={tag}
+                                                 closable={true}
+                                                 key={tag.id}
+                                                 onDelete={ onDeleteTag }/>
+                                          </ShiftRight>)}
+            <Input placeholder="type tags here"
+                   onChange = {this.onchange.bind(this)}
+                   onKeyDown = {this.onkeydown.bind(this)}/>
+            { (foundTags === null) || ( foundTags.length === 0) ? null :
+            <FAList><Grey><Left><ShiftDown>Tags found: </ShiftDown></Left></Grey>
+            {foundTags.map(tag => <Tag tag={tag} closable={false}  key={tag.id}/>)}
+            </FAList> }
+        </FAInput></FormAutocomplete>;
+    }
+};

@@ -93,7 +93,7 @@ PopupController.prototype = {
         this.setArchivedIcon.addEventListener('click', this.setArchived.bind(this));
         this.removeArchivedIcon.addEventListener('click', this.removeArchived.bind(this));
         
-        this.tagsInput.addEventListener('input',this.TagsInputChanged.bind(this));
+        this.tagsInput.addEventListener('input',this.onTagsInputChanged.bind(this));
     },
     
     
