@@ -2918,14 +2918,9 @@
 	        onDeleteTag: (tagId) => { dispatch(actions_1.deleteTag(tagId)); }
 	    };
 	};
-	class Article extends React.Component {
-	    render() {
-	        const { article, allTags, editMode, helpMode, onSaveClick, onDeleteClick, onCancelClick, onArchivedClick, onStarredClick, onEditClick, onHelpClick, onSaveTags, onDeleteTag } = this.props;
-	        return React.createElement(helpers_1.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), editMode
-	            ? React.createElement(TitleEdit_1.TitleEdit, {title: article.title, Save: onSaveClick, Cancel: onCancelClick})
-	            : React.createElement(Title_1.default, {title: article.title, helpMode: helpMode}), React.createElement(helpers_1.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(helpers_1.Right, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icons_1.EditIcon, {onClick: onEditClick}), React.createElement(Icons_1.ArchiveIcon, {checked: article.is_archived === 1, onClick: onArchivedClick}), React.createElement(Icons_1.StarredIcon, {checked: article.is_starred === 1, onClick: onStarredClick}), React.createElement(Icons_1.TrashIcon, {onClick: onDeleteClick}), React.createElement(Icons_1.HelpIcon, {checked: helpMode, onClick: onHelpClick})))), React.createElement(helpers_1.CardFooter, null, React.createElement(Tags_1.Tags, {articleTags: article.tags, allTags: allTags, onSaveTags: onSaveTags, onDeleteTag: onDeleteTag})));
-	    }
-	}
+	const Article = ({ article = null, allTags = [], editMode = false, helpMode = false, onSaveClick = null, onDeleteClick = null, onCancelClick = null, onArchivedClick = null, onStarredClick = null, onEditClick = null, onHelpClick = null, onSaveTags = null, onDeleteTag = null }) => React.createElement(helpers_1.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), editMode
+	    ? React.createElement(TitleEdit_1.TitleEdit, {title: article.title, Save: onSaveClick, Cancel: onCancelClick})
+	    : React.createElement(Title_1.default, {title: article.title, helpMode: helpMode}), React.createElement(helpers_1.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(helpers_1.Right, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icons_1.EditIcon, {onClick: onEditClick}), React.createElement(Icons_1.ArchiveIcon, {checked: article.is_archived === 1, onClick: onArchivedClick}), React.createElement(Icons_1.StarredIcon, {checked: article.is_starred === 1, onClick: onStarredClick}), React.createElement(Icons_1.TrashIcon, {onClick: onDeleteClick}), React.createElement(Icons_1.HelpIcon, {checked: helpMode, onClick: onHelpClick})))), React.createElement(helpers_1.CardFooter, null, React.createElement(Tags_1.Tags, {articleTags: article.tags, allTags: allTags, onSaveTags: onSaveTags, onDeleteTag: onDeleteTag})));
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(Article);
 
@@ -3162,10 +3157,17 @@
 	            this.setState(Object.assign(this.state, { tagsSrt: `${this.props.articleTags.map(tag => tag.label).join(",")}${inputValue === "" ? "" : ","}${inputValue}` }));
 	        }
 	    }
+	    tagExists(tag) {
+	        return (this.props.articleTags.map(t => t.label)
+	            .indexOf(tag.slice(0, -1)) !== -1);
+	    }
 	    onkeydown(e) {
 	        const keyCode = e.keyCode;
 	        const key = e.key;
-	        if (keyCode === 32 || keyCode === 13 || key === "," || key === ";") {
+	        const value = e.currentTarget.value;
+	        if ((keyCode === 32 || keyCode === 13 || key === "," || key === ";")
+	            && (!this.tagExists(value))) {
+	            e.currentTarget.value = "";
 	            this.props.onSaveTags(this.state.tagsSrt);
 	        }
 	    }

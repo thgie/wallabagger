@@ -51,10 +51,18 @@ export class Tags extends React.Component<ITagsProps, ITagsState> {
        }
     }
 
+    tagExists(tag: string): boolean  {
+      return ( this.props.articleTags.map(t => t.label)
+               .indexOf(tag) !== -1 );
+    }
+
     onkeydown(e: KeyboardEvent) {
         const keyCode = e.keyCode;
         const key = e.key;
-        if (keyCode === 32 || keyCode === 13 || key === "," || key === ";") {
+        const value = (e.currentTarget as HTMLInputElement).value;
+        if ((keyCode === 32 || keyCode === 13 || key === "," || key === ";")
+             && (!this.tagExists(value)) ) {
+            (e.currentTarget as HTMLInputElement).value = "";
             this.props.onSaveTags(this.state.tagsSrt);
         }
     }

@@ -21,6 +21,7 @@ import { toggleEditMode,
 
 interface IArticleProps extends React.Props<any> {
     article: IWallabagArticle;
+    allTags: ITag[];
     editMode: boolean;
     helpMode: boolean;
     onEditClick: () => void;
@@ -30,7 +31,6 @@ interface IArticleProps extends React.Props<any> {
     onArchivedClick: () => void;
     onDeleteClick: () => void;
     onHelpClick: () => void;
-    allTags: ITag[];
     onSaveTags: (tags: string) => void;
     onDeleteTag: (tagId: number) => void;
 }
@@ -58,29 +58,27 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-class Article extends React.Component< IArticleProps, {}>  {
-    render() {
-        const { article, allTags, editMode, helpMode, onSaveClick, onDeleteClick, onCancelClick, onArchivedClick, onStarredClick, onEditClick, onHelpClick, onSaveTags, onDeleteTag } = this.props;
-        return <Card>
-                    <Picture url={ article.preview_picture } />
-                    { editMode
-                        ? <TitleEdit title= { article.title } Save={onSaveClick} Cancel={onCancelClick}  />
-                        : <Title title= { article.title } helpMode={helpMode}/> }
-                    <CardFooter>
-                        <Domain domainName = { article.domain_name } />
-                        <Right><ShiftDown>
-                            <EditIcon onClick={ onEditClick }/>
-                            <ArchiveIcon checked={ article.is_archived === 1 }  onClick ={ onArchivedClick }/>
-                            <StarredIcon checked={ article.is_starred === 1 } onClick ={ onStarredClick }/>
-                            <TrashIcon onClick={ onDeleteClick }/>
-                            <HelpIcon checked={ helpMode } onClick ={ onHelpClick }/>
-                        </ShiftDown></Right>
-                    </CardFooter>
-                    <CardFooter>
-                        <Tags articleTags={ article.tags } allTags={ allTags } onSaveTags = { onSaveTags } onDeleteTag={ onDeleteTag }/>
-                    </CardFooter>
-                </Card>;
-    }
-}
+const Article = ({  article = null, allTags = [], editMode = false, helpMode = false,
+                    onSaveClick  = null, onDeleteClick  = null, onCancelClick = null, onArchivedClick = null,
+                    onStarredClick = null, onEditClick = null, onHelpClick = null, onSaveTags = null, onDeleteTag = null }: IArticleProps) =>
+<Card>
+    <Picture url={ article.preview_picture } />
+    { editMode
+        ? <TitleEdit title= { article.title } Save={onSaveClick} Cancel={onCancelClick}  />
+        : <Title title= { article.title } helpMode={helpMode}/> }
+    <CardFooter>
+        <Domain domainName = { article.domain_name } />
+        <Right><ShiftDown>
+            <EditIcon onClick={ onEditClick }/>
+            <ArchiveIcon checked={ article.is_archived === 1 }  onClick ={ onArchivedClick }/>
+            <StarredIcon checked={ article.is_starred === 1 } onClick ={ onStarredClick }/>
+            <TrashIcon onClick={ onDeleteClick }/>
+            <HelpIcon checked={ helpMode } onClick ={ onHelpClick }/>
+        </ShiftDown></Right>
+    </CardFooter>
+    <CardFooter>
+        <Tags articleTags={ article.tags } allTags={ allTags } onSaveTags = { onSaveTags } onDeleteTag={ onDeleteTag }/>
+    </CardFooter>
+</Card>;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Article) ;
