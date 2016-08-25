@@ -11,7 +11,8 @@ const INITIAL_STATE: any =  {
     article: {},
     tags: [],
     editMode: false,
-    helpMode: false
+    helpMode: false,
+    deleteMode: false
 };
 
 function rootReducer(state = INITIAL_STATE , action: any ): any  {

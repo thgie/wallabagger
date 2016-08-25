@@ -7,3 +7,4 @@ export const SET_ARTICLE = "SET_ARTICLE";
 export const SET_TAGS = "SET_TAGS";
 export const TOGGLE_EDIT = "TOGGLE_EDIT";
 export const TOGGLE_HELP = "TOGGLE_HELP";
+export const TOGGLE_DELETE = "TOGGLE_DELETE";

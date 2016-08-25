@@ -2907,20 +2907,15 @@
 	};
 	const mapDispatchToProps = (dispatch) => {
 	    return {
-	        onEditClick: () => { dispatch(actions_1.toggleEditMode()); },
 	        onCancelClick: () => { dispatch(actions_1.toggleEditMode()); },
 	        onSaveClick: (title) => { dispatch(actions_1.setTitle(title)); },
-	        onStarredClick: () => { dispatch(actions_1.toggleStarred()); },
-	        onArchivedClick: () => { dispatch(actions_1.toggleArchived()); },
-	        onDeleteClick: () => { dispatch(actions_1.deleteArticle()); },
-	        onHelpClick: () => { dispatch(actions_1.toggleHelpMode()); },
 	        onSaveTags: (tags) => { dispatch(actions_1.setTags(tags)); },
 	        onDeleteTag: (tagId) => { dispatch(actions_1.deleteTag(tagId)); }
 	    };
 	};
-	const Article = ({ article = null, allTags = [], editMode = false, helpMode = false, onSaveClick = null, onDeleteClick = null, onCancelClick = null, onArchivedClick = null, onStarredClick = null, onEditClick = null, onHelpClick = null, onSaveTags = null, onDeleteTag = null }) => React.createElement(helpers_1.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), editMode
+	const Article = ({ article = null, allTags = [], editMode = false, helpMode = false, onSaveClick = null, onCancelClick = null, onSaveTags = null, onDeleteTag = null }) => React.createElement(helpers_1.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), editMode
 	    ? React.createElement(TitleEdit_1.TitleEdit, {title: article.title, Save: onSaveClick, Cancel: onCancelClick})
-	    : React.createElement(Title_1.default, {title: article.title, helpMode: helpMode}), React.createElement(helpers_1.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(helpers_1.Right, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icons_1.EditIcon, {onClick: onEditClick}), React.createElement(Icons_1.ArchiveIcon, {checked: article.is_archived === 1, onClick: onArchivedClick}), React.createElement(Icons_1.StarredIcon, {checked: article.is_starred === 1, onClick: onStarredClick}), React.createElement(Icons_1.TrashIcon, {onClick: onDeleteClick}), React.createElement(Icons_1.HelpIcon, {checked: helpMode, onClick: onHelpClick})))), React.createElement(helpers_1.CardFooter, null, React.createElement(Tags_1.Tags, {articleTags: article.tags, allTags: allTags, onSaveTags: onSaveTags, onDeleteTag: onDeleteTag})));
+	    : React.createElement(Title_1.default, {title: article.title, helpMode: helpMode}), React.createElement(helpers_1.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(helpers_1.Right, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icons_1.EditIcon, null), React.createElement(Icons_1.ArchiveIcon, null), React.createElement(Icons_1.StarredIcon, null), React.createElement(Icons_1.TrashIcon, null), React.createElement(Icons_1.HelpIcon, null)))), React.createElement(helpers_1.CardFooter, null, React.createElement(Tags_1.Tags, {articleTags: article.tags, allTags: allTags, onSaveTags: onSaveTags, onDeleteTag: onDeleteTag})));
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(Article);
 
@@ -3115,13 +3110,47 @@
 	///<reference path="../../typings/index.d.ts" />
 	const React = __webpack_require__(/*! react */ 1);
 	const helpers_1 = __webpack_require__(/*! ./helpers */ 41);
+	const actions_1 = __webpack_require__(/*! ../actions */ 5);
+	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
+	// export const Icons = () =>   
+	//         <Right><ShiftDown>
+	//              <EditIcon onClick={ onEditClick }/>
+	//             <ArchiveIcon checked={ article.is_archived === 1 }  onClick ={ onArchivedClick }/>
+	//             <StarredIcon checked={ article.is_starred === 1 } onClick ={ onStarredClick }/>
+	//             <TrashIcon onClick={ onDeleteClick }/>
+	//             <HelpIcon/>
+	//         </ShiftDown></Right>;
 	exports.Icon = ({ iconName = "", onClick = null }) => React.createElement(helpers_1.ShiftRight, null, React.createElement(helpers_1.Grey, null, React.createElement(helpers_1.Clickable, null, React.createElement(helpers_1.Icn, {name: iconName, onClick: onClick}))));
-	exports.EditIcon = ({ onClick = null }) => React.createElement(exports.Icon, {iconName: "icon-pencil", onClick: onClick});
-	exports.TrashIcon = ({ onClick = null }) => React.createElement(exports.Icon, {iconName: "icon-bin", onClick: onClick});
-	exports.ArchiveIcon = ({ checked = false, onClick = null }) => React.createElement(exports.Icon, {iconName: checked ? "icon-checkmark" : "icon-checkmark2", onClick: onClick});
-	exports.StarredIcon = ({ checked = false, onClick = null }) => React.createElement(exports.Icon, {iconName: checked ? "icon-star2" : "icon-star", onClick: onClick});
-	exports.HelpIcon = ({ checked = false, onClick = null }) => React.createElement(exports.Icon, {iconName: checked ? "icon-help2" : "icon-help", onClick: onClick});
-	exports.TagsIcon = ({ onClick = null }) => React.createElement(exports.Icon, {iconName: "icon-tags"});
+	// ----------------------------------------------
+	// Edit icon 
+	const mapDispatchToPropsEdit = (dispatch) => ({ onClick: () => { dispatch(actions_1.toggleEditMode()); } });
+	const EditIcn = ({ onClick = null }) => React.createElement(exports.Icon, {iconName: "icon-pencil", onClick: onClick});
+	exports.EditIcon = react_redux_1.connect(null, mapDispatchToPropsEdit)(EditIcn);
+	// ----------------------------------------------
+	// Trash icon 
+	const mapDispatchToPropsTrash = (dispatch) => ({ onClick: () => { dispatch(actions_1.deleteArticle()); } });
+	const TrashIcn = ({ onClick = null }) => React.createElement(exports.Icon, {iconName: "icon-bin", onClick: onClick});
+	exports.TrashIcon = react_redux_1.connect(null, mapDispatchToPropsTrash)(TrashIcn);
+	// ----------------------------------------------
+	// Archived icon 
+	const mapStateToPropsArch = (state) => ({ checked: state.article.is_archived });
+	const mapDispatchToPropsArch = (dispatch) => ({ onClick: () => { dispatch(actions_1.toggleArchived()); } });
+	const ArchiveIcn = ({ checked = false, onClick = null }) => React.createElement(exports.Icon, {iconName: checked ? "icon-checkmark" : "icon-checkmark2", onClick: onClick});
+	exports.ArchiveIcon = react_redux_1.connect(mapStateToPropsArch, mapDispatchToPropsArch)(ArchiveIcn);
+	// ----------------------------------------------
+	// Starred icon 
+	const mapStateToPropsStar = (state) => ({ checked: state.article.is_starred });
+	const mapDispatchToPropsStar = (dispatch) => ({ onClick: () => { dispatch(actions_1.toggleStarred()); } });
+	const StarredIcn = ({ checked = false, onClick = null }) => React.createElement(exports.Icon, {iconName: checked ? "icon-star2" : "icon-star", onClick: onClick});
+	exports.StarredIcon = react_redux_1.connect(mapStateToPropsStar, mapDispatchToPropsStar)(StarredIcn);
+	// ----------------------------------------------
+	// Help icon 
+	const mapStateToPropsHelp = (state) => ({ checked: state.helpMode });
+	const mapDispatchToPropsHelp = (dispatch) => ({ onClick: () => { dispatch(actions_1.toggleHelpMode()); } });
+	const HelpIcn = ({ checked = false, onClick = null }) => React.createElement(exports.Icon, {iconName: checked ? "icon-help2" : "icon-help", onClick: onClick});
+	exports.HelpIcon = react_redux_1.connect(mapStateToPropsHelp, mapDispatchToPropsHelp)(HelpIcn);
+	// ----------------------------------------------
+	exports.TagsIcon = () => React.createElement(exports.Icon, {iconName: "icon-tags"});
 
 
 /***/ },
@@ -3159,7 +3188,7 @@
 	    }
 	    tagExists(tag) {
 	        return (this.props.articleTags.map(t => t.label)
-	            .indexOf(tag.slice(0, -1)) !== -1);
+	            .indexOf(tag) !== -1);
 	    }
 	    onkeydown(e) {
 	        const keyCode = e.keyCode;
