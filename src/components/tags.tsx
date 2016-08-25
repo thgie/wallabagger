@@ -1,14 +1,46 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
+import { connect } from "react-redux";
 import { ITag } from "../wallabag-api";
 import { TagsIcon } from "./Icons";
 import { ShiftRight, ShiftDown, FormAutocomplete, FAInput, FAList, Grey, Left, Input, Clickable, Chip, Cross } from "./helpers";
+import * as Actions  from "../actions";
 
 interface ITagProps extends React.Props<any> {
     tag: ITag;
     closable: boolean;
     onDelete?: (tagId: number) => void;
 }
+
+interface ITagPackProps extends React.Props<any> {
+    articleTags: ITag[];
+    allTags: ITag[];
+    onSaveTags: (tags: string) => void;
+    onDeleteTag: (tagId: number) => void;
+}
+
+
+function mapStateToPropsTags (state: any)
+{
+    return {
+        articleTags: state.article.tags,
+        allTags: state.allTags
+    };
+};
+
+function mapDispatchToPropsTags (dispatch: any) {
+    return {
+                onSaveTags: (tags: string) => {dispatch(Actions.setTags(tags)); },
+                onDeleteTag: (tagId: number) => {dispatch(Actions.deleteTag(tagId)); }
+        };
+}
+
+const TagsPck = ({  articleTags = [], allTags = [],
+                    onSaveTags = null, onDeleteTag = null  }: ITagPackProps) =>
+    <Tags articleTags={ articleTags } allTags={ allTags } onSaveTags = { onSaveTags } onDeleteTag={ onDeleteTag }/>;
+
+
+const TagsPack = connect(mapStateToPropsTags, mapDispatchToPropsTags)(TagsPck);
 
 class Tag extends React.Component<ITagProps, {}> {
     deleteClick(e: MouseEvent) {
@@ -35,7 +67,7 @@ interface ITagsState {
     foundTags: ITag[];
 }
 
-export class Tags extends React.Component<ITagsProps, ITagsState> {
+class Tags extends React.Component<ITagsProps, ITagsState> {
 
     constructor(props: ITagsProps) {
         super(props);
@@ -88,3 +120,5 @@ export class Tags extends React.Component<ITagsProps, ITagsState> {
         </FAInput></FormAutocomplete>;
     }
 };
+
+export { TagsPack }
