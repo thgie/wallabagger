@@ -2899,33 +2899,18 @@
 	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
 	const Picture_1 = __webpack_require__(/*! ./Picture */ 40);
 	const Title_1 = __webpack_require__(/*! ./Title */ 43);
-	const TitleEdit_1 = __webpack_require__(/*! ./TitleEdit */ 44);
-	const Domain_1 = __webpack_require__(/*! ./Domain */ 45);
-	const Icons_1 = __webpack_require__(/*! ./Icons */ 46);
-	const Tags_1 = __webpack_require__(/*! ./Tags */ 47);
-	const helpers_1 = __webpack_require__(/*! ./helpers */ 41);
-	const actions_1 = __webpack_require__(/*! ../actions */ 5);
+	const Domain_1 = __webpack_require__(/*! ./Domain */ 44);
+	const Icons_1 = __webpack_require__(/*! ./Icons */ 45);
+	const Tags_1 = __webpack_require__(/*! ./Tags */ 46);
+	const H = __webpack_require__(/*! ./helpers */ 41);
 	const mapStateToProps = (state) => {
 	    return {
-	        article: state.article,
-	        editMode: state.editMode,
-	        helpMode: state.helpMode,
-	        tags: state.allTags
+	        article: state.article
 	    };
 	};
-	const mapDispatchToProps = (dispatch) => {
-	    return {
-	        onCancelClick: () => { dispatch(actions_1.toggleEditMode()); },
-	        onSaveClick: (title) => { dispatch(actions_1.setTitle(title)); },
-	        onSaveTags: (tags) => { dispatch(actions_1.setTags(tags)); },
-	        onDeleteTag: (tagId) => { dispatch(actions_1.deleteTag(tagId)); }
-	    };
-	};
-	const Article = ({ article = null, allTags = [], editMode = false, helpMode = false, onSaveClick = null, onCancelClick = null, onSaveTags = null, onDeleteTag = null }) => React.createElement(helpers_1.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), editMode
-	    ? React.createElement(TitleEdit_1.TitleEdit, {title: article.title, Save: onSaveClick, Cancel: onCancelClick})
-	    : React.createElement(Title_1.default, {title: article.title, helpMode: helpMode}), React.createElement(helpers_1.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(Icons_1.IconPack, null)), React.createElement(helpers_1.CardFooter, null, React.createElement(Tags_1.TagsPack, null)));
+	const Article = ({ article = null }) => React.createElement(H.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), React.createElement(Title_1.TitlePack, null), React.createElement(H.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(Icons_1.IconPack, null)), React.createElement(H.CardFooter, null, React.createElement(Tags_1.TagsPack, null)));
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(Article);
+	exports.default = react_redux_1.connect(mapStateToProps)(Article);
 
 
 /***/ },
@@ -3051,25 +3036,12 @@
 	"use strict";
 	///<reference path="../../typings/index.d.ts" />
 	const React = __webpack_require__(/*! react */ 1);
-	const helpers_1 = __webpack_require__(/*! ./helpers */ 41);
+	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
+	const H = __webpack_require__(/*! ./helpers */ 41);
+	const Actions = __webpack_require__(/*! ../actions */ 5);
 	const Title = ({ title = "test title", helpMode = false }) => helpMode
-	    ? React.createElement(helpers_1.CardHeader, null, React.createElement(helpers_1.Clickable, null, React.createElement(helpers_1.BigBlue, null, React.createElement(helpers_1.Tooltip, {tooltip: "Click to open saved article"}, title))))
-	    : React.createElement(helpers_1.CardHeader, null, React.createElement(helpers_1.Clickable, null, React.createElement(helpers_1.BigBlue, null, title)));
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Title;
-
-
-/***/ },
-/* 44 */
-/*!**************************************!*\
-  !*** ./src/components/TitleEdit.tsx ***!
-  \**************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	///<reference path="../../typings/index.d.ts" />
-	const React = __webpack_require__(/*! react */ 1);
-	const helpers_1 = __webpack_require__(/*! ./helpers */ 41);
+	    ? React.createElement(H.CardHeader, null, React.createElement(H.Clickable, null, React.createElement(H.BigBlue, null, React.createElement(H.Tooltip, {tooltip: "Click to open saved article"}, title))))
+	    : React.createElement(H.CardHeader, null, React.createElement(H.Clickable, null, React.createElement(H.BigBlue, null, title)));
 	class TitleEdit extends React.Component {
 	    constructor(props) {
 	        super(props);
@@ -3080,19 +3052,38 @@
 	    }
 	    saveClick() {
 	        const { Save } = this.props;
-	        console.log(this.state.title);
 	        Save(this.state.title);
 	    }
 	    render() {
 	        const { title, Cancel } = this.props;
-	        return React.createElement(helpers_1.CardBody, null, React.createElement(helpers_1.Text, {value: this.state.title, onChange: this.titleChange.bind(this)}), React.createElement(helpers_1.ButtonLink, {onClick: this.saveClick.bind(this)}, "Save"), React.createElement(helpers_1.ButtonLink, {onClick: Cancel}, "Cancel"));
+	        return React.createElement(H.CardBody, null, React.createElement(H.Text, {value: this.state.title, onChange: this.titleChange.bind(this)}), React.createElement(H.ButtonLink, {onClick: this.saveClick.bind(this)}, "Save"), React.createElement(H.ButtonLink, {onClick: Cancel}, "Cancel"));
 	    }
 	}
-	exports.TitleEdit = TitleEdit;
+	function mapStateToPropsTitle(state) {
+	    return {
+	        editMode: state.editMode,
+	        helpMode: state.helpMode,
+	        title: state.article.title
+	    };
+	}
+	;
+	function mapDispatchToPropsTitle(dispatch) {
+	    return {
+	        onCancelClick: () => { dispatch(Actions.toggleEditMode()); },
+	        onSaveClick: (title) => { dispatch(Actions.setTitle(title)); }
+	    };
+	}
+	const TitlePck = ({ editMode = false, helpMode = false, title = "", onSaveClick = null, onCancelClick = null }) => {
+	    return editMode
+	        ? React.createElement(TitleEdit, {title: title, Save: onSaveClick, Cancel: onCancelClick})
+	        : React.createElement(Title, {title: title, helpMode: helpMode});
+	};
+	const TitlePack = react_redux_1.connect(mapStateToPropsTitle, mapDispatchToPropsTitle)(TitlePck);
+	exports.TitlePack = TitlePack;
 
 
 /***/ },
-/* 45 */
+/* 44 */
 /*!***********************************!*\
   !*** ./src/components/Domain.tsx ***!
   \***********************************/
@@ -3108,7 +3099,7 @@
 
 
 /***/ },
-/* 46 */
+/* 45 */
 /*!**********************************!*\
   !*** ./src/components/Icons.tsx ***!
   \**********************************/
@@ -3167,7 +3158,7 @@
 
 
 /***/ },
-/* 47 */
+/* 46 */
 /*!*********************************!*\
   !*** ./src/components/Tags.tsx ***!
   \*********************************/
@@ -3177,13 +3168,13 @@
 	///<reference path="../../typings/index.d.ts" />
 	const React = __webpack_require__(/*! react */ 1);
 	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
-	const Icons_1 = __webpack_require__(/*! ./Icons */ 46);
+	const Icons_1 = __webpack_require__(/*! ./Icons */ 45);
 	const helpers_1 = __webpack_require__(/*! ./helpers */ 41);
 	const Actions = __webpack_require__(/*! ../actions */ 5);
 	function mapStateToPropsTags(state) {
 	    return {
 	        articleTags: state.article.tags,
-	        allTags: state.tags
+	        allTags: state.allTags
 	    };
 	}
 	;

@@ -11,6 +11,8 @@ interface ITitleEditProps extends React.Props<any> {
 interface ITitleEditState {
     title: string;
 }
+
+
 export class TitleEdit extends React.Component<ITitleEditProps, ITitleEditState> {
     constructor(props: ITitleEditProps) {
         super(props);
