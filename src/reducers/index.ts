@@ -44,6 +44,9 @@ function rootReducer(state = INITIAL_STATE , action: any ): any  {
             return Object.assign({}, state, {
                 helpMode: !state.helpMode });
 
+        case ActionTypes.TOGGLE_DELETE:
+            return Object.assign({}, state, {
+                deleteMode: !state.deleteMode });
 
         default:
             return state;

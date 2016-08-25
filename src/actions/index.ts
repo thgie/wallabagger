@@ -82,6 +82,9 @@ export const toggleHelpMode = ( ): any => ({
     type: ActionTypes.TOGGLE_HELP
 });
 
+export const toggleDeleteMode = ( ): any => ({
+    type: ActionTypes.TOGGLE_DELETE
+});
 
 export const setTitle = (title: string): any => {
     return (dispatch: any, getState: any) => {
