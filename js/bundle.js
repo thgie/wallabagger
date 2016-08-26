@@ -3226,7 +3226,7 @@
 	function mapStateToPropsTags(state) {
 	    return {
 	        articleTags: state.article.tags,
-	        allTags: state.allTags
+	        allTags: state.tags
 	    };
 	}
 	;
@@ -3252,12 +3252,19 @@
 	    constructor(props) {
 	        super(props);
 	        this.state = { foundTags: [], tagsSrt: props.articleTags.map(tag => tag.label).join(",") };
+	        this.tagExists = this.tagExists.bind(this);
+	        this.onchange = this.onchange.bind(this);
+	        this.onkeydown = this.onkeydown.bind(this);
 	    }
 	    onchange(e) {
 	        const inputValue = e.currentTarget.value;
 	        const lastChar = inputValue.slice(-1);
 	        if ((lastChar !== ",") && (lastChar !== ";") && (lastChar !== " ")) {
-	            this.setState(Object.assign(this.state, { tagsSrt: `${this.props.articleTags.map(tag => tag.label).join(",")}${inputValue === "" ? "" : ","}${inputValue}` }));
+	            this.setState(Object.assign(this.state, { tagsSrt: `${this.props.articleTags.map(tag => tag.label).join(",")}${inputValue === "" ? "" : ","}${inputValue}`,
+	                foundTags: this.props.allTags.filter(tag => (this.props.articleTags.map(t => t.id).indexOf(tag.id) === -1)
+	                    && (inputValue.length >= 3 && tag.label.indexOf(inputValue) !== -1)
+	                    || (inputValue === tag.label) && (!this.tagExists(inputValue)))
+	            }));
 	        }
 	    }
 	    tagExists(tag) {
@@ -3280,7 +3287,7 @@
 	    render() {
 	        let { foundTags } = this.state;
 	        let { articleTags, onDeleteTag } = this.props;
-	        return React.createElement(H.FormAutocomplete, null, React.createElement(H.FAInput, null, React.createElement(H.ShiftDown, null, React.createElement(Icons_1.TagsIcon, null)), articleTags.map(tag => React.createElement(H.ShiftRight, {key: tag.id}, React.createElement(Tag, {tag: tag, closable: true, key: tag.id, onDelete: onDeleteTag}))), React.createElement(H.Input, {placeholder: "type tags here", onChange: this.onchange.bind(this), onKeyDown: this.onkeydown.bind(this)}), (foundTags === null) || (foundTags.length === 0) ? null :
+	        return React.createElement(H.FormAutocomplete, null, React.createElement(H.FAInput, null, React.createElement(H.ShiftDown, null, React.createElement(Icons_1.TagsIcon, null)), articleTags.map(tag => React.createElement(H.ShiftRight, {key: tag.id}, React.createElement(Tag, {tag: tag, closable: true, key: tag.id, onDelete: onDeleteTag}))), React.createElement(H.Input, {placeholder: "type tags here", onChange: this.onchange, onKeyDown: this.onkeydown}), (foundTags === null) || (foundTags.length === 0) ? null :
 	            React.createElement(H.FAList, null, React.createElement(H.Grey, null, React.createElement(H.Left, null, React.createElement(H.ShiftDown, null, "Tags found: "))), foundTags.map(tag => React.createElement(Tag, {tag: tag, closable: false, key: tag.id})))));
 	    }
 	}
