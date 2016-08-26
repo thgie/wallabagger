@@ -2,7 +2,7 @@ import { EAppStatus } from "../consts";
 import * as ActionTypes from "../constants/ActionTypes";
 import { WallabagSetup } from "../setup";
 import { WallabagApi, IWallabagArticle, ITag } from "../wallabag-api";
-import { getUrlToSave } from "../utils";
+import * as utils from "../utils";
 
 export const setStatus = (status: EAppStatus, message: string): any => ({
     type: ActionTypes.SET_STATUS,
@@ -36,7 +36,7 @@ export const loading = (setup: WallabagSetup) => {
                  })
                  .then((api: WallabagApi) => {
                      dispatch(setStatus(EAppStatus.info, "Get page URL to save"));
-                     return getUrlToSave();
+                     return utils.getUrlToSave();
                  })
                  .then((url: string) => {
 //                     console.log(`msg - ${getState().get("message")}`);
@@ -160,10 +160,40 @@ export const deleteArticle = (): any => {
           .then( (article: IWallabagArticle) => {
                      dispatch(loadArticle(article)); } )
           .then(a => {
-              if ( window !== null ) window.close ;
+              if ( (utils.isExtension()) && (window !== null) ) window.close ;
           })
           .catch( (error: Error) => {
                     dispatch(setStatus(EAppStatus.error, `Error: ${error.message}`));
                  } );
     };
 };
+
+export const gotoOriginalPage = (): any => {
+    return (dispatch: any, getState: any) => {
+       const article = ( getState().article as IWallabagArticle);
+
+       if ( utils.isExtension()  ) {
+           chrome.tabs.create({url: article.url});
+           if (window !== null) window.close;
+        } else {
+           if (window !== null) window.location.assign(article.url);
+        }
+        ;
+     };
+};
+
+export const gotoArticlePage = (): any => {
+    return (dispatch: any, getState: any) => {
+       const api = ( getState().api as WallabagApi);
+       const article = ( getState().article as IWallabagArticle);
+       let url = `${api.setup.Url}/view/${article.id}`;
+       if ( utils.isExtension()  ) {
+           chrome.tabs.create({url: url});
+           if (window !== null) window.close;
+        } else {
+           if (window !== null) window.location.assign(url);
+        }
+        ;
+     };
+};
+

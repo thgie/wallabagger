@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { ITag } from "../wallabag-api";
 import { TagsIcon } from "./Icons";
-import { ShiftRight, ShiftDown, FormAutocomplete, FAInput, FAList, Grey, Left, Input, Clickable, Chip, Cross } from "./helpers";
+import * as H from "./helpers";
 import * as Actions  from "../actions";
 
 interface ITagProps extends React.Props<any> {
@@ -48,9 +48,9 @@ class Tag extends React.Component<ITagProps, {}> {
     }
     render() {
         const { tag, closable } = this.props;
-        return <Clickable>
-            <Chip>{tag.label}{ closable ? <Cross onClick={this.deleteClick.bind(this)}/> : null }</Chip>
-        </Clickable> ;
+        return <H.Clickable>
+            <H.Chip>{tag.label}{ closable ? <H.Cross onClick={this.deleteClick.bind(this)}/> : null }</H.Chip>
+        </H.Clickable> ;
     }
 }
 
@@ -95,6 +95,9 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
         if ((keyCode === 32 || keyCode === 13 || key === "," || key === ";")
              && (!this.tagExists(value)) ) {
             (e.currentTarget as HTMLInputElement).value = "";
+// TODO: disable input while saving tags            
+//            (e.currentTarget as HTMLInputElement).placeholder = "saving tags...";
+//            (e.currentTarget as HTMLInputElement).readOnly = true;
             this.props.onSaveTags(this.state.tagsSrt);
         }
     }
@@ -102,22 +105,22 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
     render() {
         let { foundTags } = this.state;
         let { articleTags, onDeleteTag  } = this.props;
-        return <FormAutocomplete><FAInput>
-            <ShiftDown><TagsIcon /></ShiftDown>
-                { articleTags.map(tag => <ShiftRight key={tag.id}>
+        return <H.FormAutocomplete><H.FAInput>
+            <H.ShiftDown><TagsIcon /></H.ShiftDown>
+                { articleTags.map(tag => <H.ShiftRight key={tag.id}>
                                             <Tag tag={tag}
                                                  closable={true}
                                                  key={tag.id}
                                                  onDelete={ onDeleteTag }/>
-                                          </ShiftRight>)}
-            <Input placeholder="type tags here"
+                                          </H.ShiftRight>)}
+            <H.Input placeholder="type tags here"
                    onChange = {this.onchange.bind(this)}
                    onKeyDown = {this.onkeydown.bind(this)}/>
             { (foundTags === null) || ( foundTags.length === 0) ? null :
-            <FAList><Grey><Left><ShiftDown>Tags found: </ShiftDown></Left></Grey>
+            <H.FAList><H.Grey><H.Left><H.ShiftDown>Tags found: </H.ShiftDown></H.Left></H.Grey>
             {foundTags.map(tag => <Tag tag={tag} closable={false}  key={tag.id}/>)}
-            </FAList> }
-        </FAInput></FormAutocomplete>;
+            </H.FAList> }
+        </H.FAInput></H.FormAutocomplete>;
     }
 };
 

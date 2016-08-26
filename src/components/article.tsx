@@ -1,37 +1,26 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
-import { connect } from "react-redux";
 
-import { IWallabagArticle, ITag } from "../wallabag-api";
 import Picture from "./Picture";
 import { TitlePack } from "./Title";
-import Domain from "./Domain";
+import { Domain } from "./Domain";
 import { IconPack } from "./Icons";
 import { TagsPack } from "./Tags";
 import * as H from "./helpers";
-import * as Actions from "../actions";
+import { ConfirmDelete } from "./modals";
 
-interface IArticleProps extends React.Props<any> {
-    article: IWallabagArticle;
-}
-
-const mapStateToProps = (state: any) => {
-  return {
-    article: state.article
-  };
-};
-
-const Article = ({  article = null  }: IArticleProps) =>
+const Article = () =>
 <H.Card>
-    <Picture url={ article.preview_picture } />
+    <Picture />
     <TitlePack />
     <H.CardFooter>
-        <Domain domainName = { article.domain_name } />
+        <Domain />
         <IconPack />
     </H.CardFooter>
     <H.CardFooter>
         <TagsPack />
     </H.CardFooter>
+    <ConfirmDelete/>
 </H.Card>;
 
-export default connect(mapStateToProps)(Article) ;
+export default Article ;

@@ -373,7 +373,7 @@
 	const consts_1 = __webpack_require__(/*! ../consts */ 6);
 	const ActionTypes = __webpack_require__(/*! ../constants/ActionTypes */ 7);
 	const wallabag_api_1 = __webpack_require__(/*! ../wallabag-api */ 8);
-	const utils_1 = __webpack_require__(/*! ../utils */ 4);
+	const utils = __webpack_require__(/*! ../utils */ 4);
 	exports.setStatus = (status, message) => ({
 	    type: ActionTypes.SET_STATUS,
 	    appStatus: status,
@@ -405,7 +405,7 @@
 	        })
 	            .then((api) => {
 	            dispatch(exports.setStatus(consts_1.EAppStatus.info, "Get page URL to save"));
-	            return utils_1.getUrlToSave();
+	            return utils.getUrlToSave();
 	        })
 	            .then((url) => {
 	            //                     console.log(`msg - ${getState().get("message")}`);
@@ -522,12 +522,44 @@
 	            dispatch(exports.loadArticle(article));
 	        })
 	            .then(a => {
-	            if (window !== null)
+	            if ((utils.isExtension()) && (window !== null))
 	                window.close;
 	        })
 	            .catch((error) => {
 	            dispatch(exports.setStatus(consts_1.EAppStatus.error, `Error: ${error.message}`));
 	        });
+	    };
+	};
+	exports.gotoOriginalPage = () => {
+	    return (dispatch, getState) => {
+	        const article = getState().article;
+	        if (utils.isExtension()) {
+	            chrome.tabs.create({ url: article.url });
+	            if (window !== null)
+	                window.close;
+	        }
+	        else {
+	            if (window !== null)
+	                window.location.assign(article.url);
+	        }
+	        ;
+	    };
+	};
+	exports.gotoArticlePage = () => {
+	    return (dispatch, getState) => {
+	        const api = getState().api;
+	        const article = getState().article;
+	        let url = `${api.setup.Url}/view/${article.id}`;
+	        if (utils.isExtension()) {
+	            chrome.tabs.create({ url: url });
+	            if (window !== null)
+	                window.close;
+	        }
+	        else {
+	            if (window !== null)
+	                window.location.assign(url);
+	        }
+	        ;
 	    };
 	};
 
@@ -2896,21 +2928,16 @@
 	"use strict";
 	///<reference path="../../typings/index.d.ts" />
 	const React = __webpack_require__(/*! react */ 1);
-	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
 	const Picture_1 = __webpack_require__(/*! ./Picture */ 40);
 	const Title_1 = __webpack_require__(/*! ./Title */ 43);
 	const Domain_1 = __webpack_require__(/*! ./Domain */ 44);
 	const Icons_1 = __webpack_require__(/*! ./Icons */ 45);
 	const Tags_1 = __webpack_require__(/*! ./Tags */ 46);
 	const H = __webpack_require__(/*! ./helpers */ 41);
-	const mapStateToProps = (state) => {
-	    return {
-	        article: state.article
-	    };
-	};
-	const Article = ({ article = null }) => React.createElement(H.Card, null, React.createElement(Picture_1.default, {url: article.preview_picture}), React.createElement(Title_1.TitlePack, null), React.createElement(H.CardFooter, null, React.createElement(Domain_1.default, {domainName: article.domain_name}), React.createElement(Icons_1.IconPack, null)), React.createElement(H.CardFooter, null, React.createElement(Tags_1.TagsPack, null)));
+	const modals_1 = __webpack_require__(/*! ./modals */ 47);
+	const Article = () => React.createElement(H.Card, null, React.createElement(Picture_1.default, null), React.createElement(Title_1.TitlePack, null), React.createElement(H.CardFooter, null, React.createElement(Domain_1.Domain, null), React.createElement(Icons_1.IconPack, null)), React.createElement(H.CardFooter, null, React.createElement(Tags_1.TagsPack, null)), React.createElement(modals_1.ConfirmDelete, null));
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = react_redux_1.connect(mapStateToProps)(Article);
+	exports.default = Article;
 
 
 /***/ },
@@ -2923,10 +2950,12 @@
 	"use strict";
 	///<reference path="../../typings/index.d.ts" />
 	const React = __webpack_require__(/*! react */ 1);
+	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
 	const helpers_1 = __webpack_require__(/*! ./helpers */ 41);
-	const Picture = ({ url = "img/wallabag-icon-128.png" }) => React.createElement(helpers_1.CardImage, null, React.createElement(helpers_1.ImgResponsive, {src: url}));
+	const mapStateToProps = (state) => ({ url: state.article.preview_picture });
+	const Picture_ = ({ url = "img/wallabag-icon-128.png" }) => React.createElement(helpers_1.CardImage, null, React.createElement(helpers_1.ImgResponsive, {src: url}));
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Picture;
+	exports.default = react_redux_1.connect(mapStateToProps)(Picture_);
 
 
 /***/ },
@@ -2951,10 +2980,12 @@
 	    fontFamily: "Roboto, sans-serif",
 	    fontSize: "24px",
 	    fontWeight: "300" }}, children);
+	exports.Centered = ({ children = null }) => React.createElement("span", {className: "centered"}, children);
 	exports.Grey = ({ children = null }) => React.createElement("span", {className: "card-meta"}, children);
-	exports.Clickable = ({ children = null }) => React.createElement("span", {style: { cursor: "pointer" }}, children);
+	exports.Clickable = ({ children = null, onClick = null }) => React.createElement("span", {style: { cursor: "pointer" }, onClick: onClick}, children);
 	exports.Left = ({ children = null }) => React.createElement("span", {className: "float-left"}, children);
 	exports.Right = ({ children = null }) => React.createElement("span", {className: "float-right"}, children);
+	exports.ShiftDown10 = ({ children = null }) => React.createElement("span", {className: "mt-10", style: { display: "inline-block" }}, " ", children);
 	exports.ShiftDown = ({ children = null }) => React.createElement("span", {style: { display: "inline-block", marginTop: "5px" }}, children);
 	exports.ShiftRight = ({ children = null }) => React.createElement("span", {style: { marginLeft: "5px" }}, children);
 	exports.Icn = ({ name = "", onClick = null }) => React.createElement("span", {className: classnames("icon", name), onClick: onClick});
@@ -2963,10 +2994,19 @@
 	exports.FAList = ({ children = null }) => React.createElement("ul", {className: "form-autocomplete-list"}, children);
 	exports.Input = ({ placeholder = "", onChange = null, onKeyDown = null }) => React.createElement("input", {className: "form-input", type: "text", placeholder: placeholder, onChange: onChange, onKeyDown: onKeyDown});
 	exports.Text = ({ value = "", onChange = null }) => React.createElement("textarea", {className: "form-input", rows: "3", value: value, onChange: onChange});
+	exports.ButtonClear = ({ children = null, onClick = null }) => React.createElement("button", {className: "btn btn-clear", onClick: onClick}, children);
 	exports.ButtonLink = ({ children = null, onClick = null }) => React.createElement("button", {className: "btn btn-link", onClick: onClick}, children);
+	exports.ButtonPrimary = ({ children = null, onClick = null }) => React.createElement("button", {className: "btn btn-primary", onClick: onClick}, children);
 	exports.Chip = ({ children = null }) => React.createElement("span", {className: "chip-sm"}, React.createElement("span", {className: "chip-name"}, children));
 	exports.Cross = ({ onClick = null }) => React.createElement("button", {className: "btn btn-clear", onClick: onClick});
-	exports.Tooltip = ({ children = null, tooltip = "" }) => React.createElement("span", {className: "tooltip", "data-tooltip": tooltip}, children);
+	exports.Tooltip = ({ children = null, tooltip = "", enabled = false }) => enabled
+	    ? React.createElement("span", {className: "tooltip", "data-tooltip": tooltip}, children)
+	    : React.createElement("span", null, children);
+	exports.ModalTitle = ({ children = null }) => React.createElement("div", {className: "modal-title"}, children);
+	exports.ModalCard = ({ children = null, active = false }) => React.createElement("div", {className: active ? "modal modal-sm active" : "modal modal-sm"}, React.createElement("div", {className: "modal-overlay"}), React.createElement("div", {className: "modal-container"}, children));
+	exports.ModalHeader = ({ children = null }) => React.createElement("div", {className: "modal-header"}, children);
+	exports.ModalBody = ({ children = null }) => React.createElement("div", {className: "modal-body"}, React.createElement("div", {className: "content"}, children));
+	exports.ModalFooter = ({ children = null }) => React.createElement("div", {className: "modal-footer"}, children);
 
 
 /***/ },
@@ -3039,9 +3079,7 @@
 	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
 	const H = __webpack_require__(/*! ./helpers */ 41);
 	const Actions = __webpack_require__(/*! ../actions */ 5);
-	const Title = ({ title = "test title", helpMode = false }) => helpMode
-	    ? React.createElement(H.CardHeader, null, React.createElement(H.Clickable, null, React.createElement(H.BigBlue, null, React.createElement(H.Tooltip, {tooltip: "Click to open saved article"}, title))))
-	    : React.createElement(H.CardHeader, null, React.createElement(H.Clickable, null, React.createElement(H.BigBlue, null, title)));
+	const Title = ({ title = "test title", helpMode = false, onClick = null }) => React.createElement(H.CardHeader, null, React.createElement(H.Clickable, {onClick: onClick}, React.createElement(H.BigBlue, null, React.createElement(H.Tooltip, {tooltip: "Click to open saved article", enabled: helpMode}, title))));
 	class TitleEdit extends React.Component {
 	    constructor(props) {
 	        super(props);
@@ -3070,13 +3108,14 @@
 	function mapDispatchToPropsTitle(dispatch) {
 	    return {
 	        onCancelClick: () => { dispatch(Actions.toggleEditMode()); },
-	        onSaveClick: (title) => { dispatch(Actions.setTitle(title)); }
+	        onSaveClick: (title) => { dispatch(Actions.setTitle(title)); },
+	        onClick: () => { dispatch(Actions.gotoArticlePage()); }
 	    };
 	}
-	const TitlePck = ({ editMode = false, helpMode = false, title = "", onSaveClick = null, onCancelClick = null }) => {
+	const TitlePck = ({ editMode = false, helpMode = false, title = "", onSaveClick = null, onCancelClick = null, onClick = null }) => {
 	    return editMode
 	        ? React.createElement(TitleEdit, {title: title, Save: onSaveClick, Cancel: onCancelClick})
-	        : React.createElement(Title, {title: title, helpMode: helpMode});
+	        : React.createElement(Title, {title: title, helpMode: helpMode, onClick: onClick});
 	};
 	const TitlePack = react_redux_1.connect(mapStateToPropsTitle, mapDispatchToPropsTitle)(TitlePck);
 	exports.TitlePack = TitlePack;
@@ -3092,10 +3131,23 @@
 	"use strict";
 	///<reference path="../../typings/index.d.ts" />
 	const React = __webpack_require__(/*! react */ 1);
-	const helpers_1 = __webpack_require__(/*! ./helpers */ 41);
-	const Domain = ({ domainName = "wallabag.org" }) => React.createElement(helpers_1.Grey, null, React.createElement(helpers_1.Clickable, null, domainName));
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Domain;
+	const H = __webpack_require__(/*! ./helpers */ 41);
+	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
+	const Actions = __webpack_require__(/*! ../actions */ 5);
+	function mapStateToProps(state) {
+	    return {
+	        domainName: state.article.domain_name
+	    };
+	}
+	;
+	function mapDispatchToProps(dispatch) {
+	    return {
+	        onClick: () => { dispatch(Actions.gotoOriginalPage()); }
+	    };
+	}
+	const Domain_ = ({ domainName = "wallabag.org", onClick = null }) => React.createElement(H.Grey, null, React.createElement(H.Clickable, {onClick: onClick}, domainName));
+	const Domain = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(Domain_);
+	exports.Domain = Domain;
 
 
 /***/ },
@@ -3169,7 +3221,7 @@
 	const React = __webpack_require__(/*! react */ 1);
 	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
 	const Icons_1 = __webpack_require__(/*! ./Icons */ 45);
-	const helpers_1 = __webpack_require__(/*! ./helpers */ 41);
+	const H = __webpack_require__(/*! ./helpers */ 41);
 	const Actions = __webpack_require__(/*! ../actions */ 5);
 	function mapStateToPropsTags(state) {
 	    return {
@@ -3193,7 +3245,7 @@
 	    }
 	    render() {
 	        const { tag, closable } = this.props;
-	        return React.createElement(helpers_1.Clickable, null, React.createElement(helpers_1.Chip, null, tag.label, closable ? React.createElement(helpers_1.Cross, {onClick: this.deleteClick.bind(this)}) : null));
+	        return React.createElement(H.Clickable, null, React.createElement(H.Chip, null, tag.label, closable ? React.createElement(H.Cross, {onClick: this.deleteClick.bind(this)}) : null));
 	    }
 	}
 	class Tags extends React.Component {
@@ -3219,17 +3271,47 @@
 	        if ((keyCode === 32 || keyCode === 13 || key === "," || key === ";")
 	            && (!this.tagExists(value))) {
 	            e.currentTarget.value = "";
+	            // TODO: disable input while saving tags            
+	            //            (e.currentTarget as HTMLInputElement).placeholder = "saving tags...";
+	            //            (e.currentTarget as HTMLInputElement).readOnly = true;
 	            this.props.onSaveTags(this.state.tagsSrt);
 	        }
 	    }
 	    render() {
 	        let { foundTags } = this.state;
 	        let { articleTags, onDeleteTag } = this.props;
-	        return React.createElement(helpers_1.FormAutocomplete, null, React.createElement(helpers_1.FAInput, null, React.createElement(helpers_1.ShiftDown, null, React.createElement(Icons_1.TagsIcon, null)), articleTags.map(tag => React.createElement(helpers_1.ShiftRight, {key: tag.id}, React.createElement(Tag, {tag: tag, closable: true, key: tag.id, onDelete: onDeleteTag}))), React.createElement(helpers_1.Input, {placeholder: "type tags here", onChange: this.onchange.bind(this), onKeyDown: this.onkeydown.bind(this)}), (foundTags === null) || (foundTags.length === 0) ? null :
-	            React.createElement(helpers_1.FAList, null, React.createElement(helpers_1.Grey, null, React.createElement(helpers_1.Left, null, React.createElement(helpers_1.ShiftDown, null, "Tags found: "))), foundTags.map(tag => React.createElement(Tag, {tag: tag, closable: false, key: tag.id})))));
+	        return React.createElement(H.FormAutocomplete, null, React.createElement(H.FAInput, null, React.createElement(H.ShiftDown, null, React.createElement(Icons_1.TagsIcon, null)), articleTags.map(tag => React.createElement(H.ShiftRight, {key: tag.id}, React.createElement(Tag, {tag: tag, closable: true, key: tag.id, onDelete: onDeleteTag}))), React.createElement(H.Input, {placeholder: "type tags here", onChange: this.onchange.bind(this), onKeyDown: this.onkeydown.bind(this)}), (foundTags === null) || (foundTags.length === 0) ? null :
+	            React.createElement(H.FAList, null, React.createElement(H.Grey, null, React.createElement(H.Left, null, React.createElement(H.ShiftDown, null, "Tags found: "))), foundTags.map(tag => React.createElement(Tag, {tag: tag, closable: false, key: tag.id})))));
 	    }
 	}
 	;
+
+
+/***/ },
+/* 47 */
+/*!***********************************!*\
+  !*** ./src/components/modals.tsx ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	///<reference path="../../typings/index.d.ts" />
+	const React = __webpack_require__(/*! react */ 1);
+	const H = __webpack_require__(/*! ./helpers */ 41);
+	const Actions = __webpack_require__(/*! ../actions */ 5);
+	const react_redux_1 = __webpack_require__(/*! react-redux */ 28);
+	const mapStateToProps = (state) => ({ Active: state.deleteMode });
+	const mapDispatchToProps = (dispatch) => ({
+	    onYesClick: () => { dispatch(Actions.deleteArticle()); },
+	    onNoClick: () => { dispatch(Actions.toggleDeleteMode()); }
+	});
+	const ConfirmDelete_ = ({ Active = false, onYesClick = null, onNoClick = null }) => React.createElement(Confirm, {title: "Please confirm delete", question: "Are you sure?", YesNo: false, Active: Active, onYesClick: onYesClick, onNoClick: onNoClick});
+	const ConfirmDelete = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(ConfirmDelete_);
+	exports.ConfirmDelete = ConfirmDelete;
+	const Confirm = ({ title = "", question = "", YesNo = false, Active = false, onYesClick = null, onNoClick = null }) => React.createElement(H.ModalCard, {active: Active}, React.createElement(H.ModalHeader, null, React.createElement(H.Right, null, React.createElement(H.ButtonClear, {onClick: onNoClick})), React.createElement(H.ModalTitle, null, title)), React.createElement(H.ModalBody, null, React.createElement(H.ShiftDown10, null, React.createElement(H.Centered, null, React.createElement("h4", null, question)))), YesNo
+	    ? React.createElement(H.ModalFooter, null, React.createElement(H.ButtonPrimary, {onClick: onYesClick}, "Yes"), React.createElement(H.ButtonLink, {onClick: onNoClick}, "No"))
+	    : React.createElement(H.ModalFooter, null, React.createElement(H.ButtonLink, {onClick: onYesClick}, "Yes"), React.createElement(H.ButtonPrimary, {onClick: onNoClick}, "No")));
+	exports.Confirm = Confirm;
 
 
 /***/ }

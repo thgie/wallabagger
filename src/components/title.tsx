@@ -7,6 +7,7 @@ import * as Actions  from "../actions";
 interface ITitleProps extends React.Props<any> {
     title: string;
     helpMode: boolean;
+    onClick: () => void;
 }
 
 interface ITitleEditProps extends React.Props<any> {
@@ -25,13 +26,14 @@ interface ITitlePackState {
     title: string;
     onSaveClick: () => void;
     onCancelClick: () => void;
+    onClick: () => void;
 }
 
 
-const Title = ({title = "test title", helpMode = false}: ITitleProps) =>
-         helpMode
-           ? <H.CardHeader><H.Clickable><H.BigBlue><H.Tooltip tooltip="Click to open saved article">{title}</H.Tooltip></H.BigBlue></H.Clickable></H.CardHeader>
-           : <H.CardHeader><H.Clickable><H.BigBlue>{title}</H.BigBlue></H.Clickable></H.CardHeader>;
+const Title = ({title = "test title", helpMode = false, onClick = null}: ITitleProps) =>
+         <H.CardHeader><H.Clickable onClick = { onClick }><H.BigBlue>
+            <H.Tooltip tooltip="Click to open saved article" enabled={ helpMode }>{title}</H.Tooltip>
+        </H.BigBlue></H.Clickable></H.CardHeader>;
 
 
 class TitleEdit extends React.Component<ITitleEditProps, ITitleEditState> {
@@ -68,7 +70,8 @@ function mapStateToPropsTitle (state: any)
 function mapDispatchToPropsTitle (dispatch: any) {
     return {
     onCancelClick: () => { dispatch(Actions.toggleEditMode()); },
-    onSaveClick: (title: string) => { dispatch(Actions.setTitle(title)); }
+    onSaveClick: (title: string) => { dispatch(Actions.setTitle(title)); },
+    onClick: () => { dispatch(Actions.gotoArticlePage()); }
         };
 }
 
@@ -77,11 +80,12 @@ const TitlePck = ({
     helpMode= false,
     title= "",
     onSaveClick= null,
-    onCancelClick= null
+    onCancelClick= null,
+    onClick = null
 }: ITitlePackState) =>  {
    return editMode
         ? <TitleEdit title = { title } Save = {onSaveClick} Cancel = {onCancelClick} />
-        : <Title title= { title } helpMode={helpMode}/>;
+        : <Title title= { title } helpMode={helpMode} onClick={ onClick }/>;
 };
 
 const TitlePack = connect(mapStateToPropsTitle,mapDispatchToPropsTitle)(TitlePck);
