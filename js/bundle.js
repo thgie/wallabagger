@@ -651,7 +651,7 @@
 	        });
 	    }
 	    savePage(pageUrl) {
-	        let content = { url: pageUrl };
+	        let content = { url: pageUrl.slice(-1) === "/" ? pageUrl : pageUrl + "/" };
 	        let url = `${this.setup.Url}${exports.entriesPath}${exports.formatEnd}`;
 	        return fetch_api_1.Post(url, this.setup.ApiToken, content)
 	            .then((fetchData) => {

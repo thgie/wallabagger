@@ -90,7 +90,7 @@ export class WallabagApi {
 
     savePage(pageUrl: string): Promise<any> {
 
-        let content: Object = { url: pageUrl };
+        let content: Object = { url: pageUrl.slice(-1) === "/" ? pageUrl : pageUrl + "/" };
         let url: string = `${this.setup.Url}${entriesPath}${formatEnd}`;
 
         return Post(url, this.setup.ApiToken, content)
