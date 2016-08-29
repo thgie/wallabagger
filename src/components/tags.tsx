@@ -21,8 +21,7 @@ interface ITagPackProps extends React.Props<any> {
 }
 
 
-function mapStateToPropsTags (state: any)
-{
+function mapStateToPropsTags (state: any) {
     return {
         articleTags: state.article.tags,
         allTags: state.tags
@@ -44,13 +43,14 @@ const TagsPck = ({  articleTags = [], allTags = [],
 const TagsPack = connect(mapStateToPropsTags, mapDispatchToPropsTags)(TagsPck);
 
 class Tag extends React.Component<ITagProps, {}> {
-    constructor(props) {
+    constructor(props: ITagProps) {
         super(props);
         this.deleteClick = this.deleteClick.bind(this);
         this.onclick = this.onclick.bind(this);
     }
     onclick(e: MouseEvent) {
-        this.props.onClick(this.props.tag.id);
+        if ( (this.props.onClick !== null) && (this.props.onClick !== undefined) )
+            this.props.onClick(this.props.tag.id);
     }
     deleteClick(e: MouseEvent) {
         this.props.onDelete(this.props.tag.id);
@@ -84,6 +84,7 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
         this.tagExists = this.tagExists.bind(this);
         this.onchange = this.onchange.bind(this);
         this.onkeydown = this.onkeydown.bind(this);
+        this.onfoundTagClick = this.onfoundTagClick.bind(this);
     }
 
     onchange(e: Event) {
@@ -113,11 +114,21 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
         if ((keyCode === 32 || keyCode === 13 || key === "," || key === ";")
              && (!this.tagExists(value)) ) {
             (e.currentTarget as HTMLInputElement).value = "";
-// TODO: disable input while saving tags            
-//            (e.currentTarget as HTMLInputElement).placeholder = "saving tags...";
-//            (e.currentTarget as HTMLInputElement).readOnly = true;
+            this.setState( Object.assign(this.state,   {foundTags: []}  ));
             this.props.onSaveTags(this.state.tagsSrt);
         }
+        if ( (key === "ArrowRight") && ( this.state.foundTags.length > 0 ) ) {
+            (e.currentTarget as HTMLInputElement).value = "";
+            const ftag: ITag = this.state.foundTags[0];
+            this.setState( Object.assign(this.state,  {foundTags: []}  ));
+            this.props.onSaveTags( `${this.props.articleTags.map(tag => tag.label).join(",")},${ftag.label}` );
+        }
+    }
+
+    onfoundTagClick(id: number) {
+        const ftag: ITag = this.state.foundTags.filter(tag => tag.id === id)[0];
+        const tsrt: string =  `${this.props.articleTags.map(tag => tag.label).join(",")},${ftag.label}`;
+        this.props.onSaveTags(tsrt);
     }
 
     render() {
@@ -136,7 +147,7 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
                    onKeyDown = {this.onkeydown}/>
             { (foundTags === null) || ( foundTags.length === 0) ? null :
             <H.FAList><H.Grey><H.Left><H.ShiftDown>Tags found: </H.ShiftDown></H.Left></H.Grey>
-            {foundTags.map(tag => <Tag tag={tag} closable={false}  key={tag.id}/>)}
+            {foundTags.map(tag => <Tag tag={tag} closable={false}  key={tag.id} onClick={this.onfoundTagClick}/>)}
             </H.FAList> }
         </H.FAInput></H.FormAutocomplete>;
     }

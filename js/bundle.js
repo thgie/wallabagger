@@ -3240,12 +3240,21 @@
 	const TagsPack = react_redux_1.connect(mapStateToPropsTags, mapDispatchToPropsTags)(TagsPck);
 	exports.TagsPack = TagsPack;
 	class Tag extends React.Component {
+	    constructor(props) {
+	        super(props);
+	        this.deleteClick = this.deleteClick.bind(this);
+	        this.onclick = this.onclick.bind(this);
+	    }
+	    onclick(e) {
+	        if ((this.props.onClick !== null) && (this.props.onClick !== undefined))
+	            this.props.onClick(this.props.tag.id);
+	    }
 	    deleteClick(e) {
 	        this.props.onDelete(this.props.tag.id);
 	    }
 	    render() {
 	        const { tag, closable } = this.props;
-	        return React.createElement(H.Clickable, null, React.createElement(H.Chip, null, tag.label, closable ? React.createElement(H.Cross, {onClick: this.deleteClick.bind(this)}) : null));
+	        return React.createElement(H.Clickable, {onClick: this.onclick}, React.createElement(H.Chip, null, tag.label, closable ? React.createElement(H.Cross, {onClick: this.deleteClick}) : null));
 	    }
 	}
 	class Tags extends React.Component {
@@ -3255,6 +3264,7 @@
 	        this.tagExists = this.tagExists.bind(this);
 	        this.onchange = this.onchange.bind(this);
 	        this.onkeydown = this.onkeydown.bind(this);
+	        this.onfoundTagClick = this.onfoundTagClick.bind(this);
 	    }
 	    onchange(e) {
 	        const inputValue = e.currentTarget.value;
@@ -3278,17 +3288,26 @@
 	        if ((keyCode === 32 || keyCode === 13 || key === "," || key === ";")
 	            && (!this.tagExists(value))) {
 	            e.currentTarget.value = "";
-	            // TODO: disable input while saving tags            
-	            //            (e.currentTarget as HTMLInputElement).placeholder = "saving tags...";
-	            //            (e.currentTarget as HTMLInputElement).readOnly = true;
+	            this.setState(Object.assign(this.state, { foundTags: [] }));
 	            this.props.onSaveTags(this.state.tagsSrt);
 	        }
+	        if ((key === "ArrowRight") && (this.state.foundTags.length > 0)) {
+	            e.currentTarget.value = "";
+	            const ftag = this.state.foundTags[0];
+	            this.setState(Object.assign(this.state, { foundTags: [] }));
+	            this.props.onSaveTags(`${this.props.articleTags.map(tag => tag.label).join(",")},${ftag.label}`);
+	        }
+	    }
+	    onfoundTagClick(id) {
+	        const ftag = this.state.foundTags.filter(tag => tag.id === id)[0];
+	        const tsrt = `${this.props.articleTags.map(tag => tag.label).join(",")},${ftag.label}`;
+	        this.props.onSaveTags(tsrt);
 	    }
 	    render() {
 	        let { foundTags } = this.state;
 	        let { articleTags, onDeleteTag } = this.props;
 	        return React.createElement(H.FormAutocomplete, null, React.createElement(H.FAInput, null, React.createElement(H.ShiftDown, null, React.createElement(Icons_1.TagsIcon, null)), articleTags.map(tag => React.createElement(H.ShiftRight, {key: tag.id}, React.createElement(Tag, {tag: tag, closable: true, key: tag.id, onDelete: onDeleteTag}))), React.createElement(H.Input, {placeholder: "type tags here", onChange: this.onchange, onKeyDown: this.onkeydown}), (foundTags === null) || (foundTags.length === 0) ? null :
-	            React.createElement(H.FAList, null, React.createElement(H.Grey, null, React.createElement(H.Left, null, React.createElement(H.ShiftDown, null, "Tags found: "))), foundTags.map(tag => React.createElement(Tag, {tag: tag, closable: false, key: tag.id})))));
+	            React.createElement(H.FAList, null, React.createElement(H.Grey, null, React.createElement(H.Left, null, React.createElement(H.ShiftDown, null, "Tags found: "))), foundTags.map(tag => React.createElement(Tag, {tag: tag, closable: false, key: tag.id, onClick: this.onfoundTagClick})))));
 	    }
 	}
 	;
