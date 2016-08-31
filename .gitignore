@@ -2,3 +2,5 @@ wallabagger.pem
 node_modules/
 js/
 typings/
+!js/options.js
+!js/popup.js
