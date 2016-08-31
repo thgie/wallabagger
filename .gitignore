@@ -1,4 +1,4 @@
 wallabagger.pem
-/node_modules/*
-/js/*
-/typings/*
+node_modules/
+js/
+typings/
