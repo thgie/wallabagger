@@ -5,6 +5,8 @@ import { ITag } from "../wallabag-api";
 import { TagsIcon } from "./Icons";
 import * as H from "./helpers";
 import * as Actions  from "../actions";
+import * as Tooltips from "../constants/tooltips";
+
 
 interface ITagProps extends React.Props<any> {
     tag: ITag;
@@ -16,6 +18,7 @@ interface ITagProps extends React.Props<any> {
 interface ITagPackProps extends React.Props<any> {
     articleTags: ITag[];
     allTags: ITag[];
+    helpMode: boolean;
     onSaveTags: (tags: string) => void;
     onDeleteTag: (tagId: number) => void;
 }
@@ -24,7 +27,8 @@ interface ITagPackProps extends React.Props<any> {
 function mapStateToPropsTags (state: any) {
     return {
         articleTags: state.article.tags,
-        allTags: state.tags
+        allTags: state.tags,
+        helpMode: state.helpMode
     };
 };
 
@@ -35,9 +39,13 @@ function mapDispatchToPropsTags (dispatch: any) {
         };
 }
 
-const TagsPck = ({  articleTags = [], allTags = [],
+const TagsPck = ({  articleTags = [], allTags = [], helpMode = false,
                     onSaveTags = null, onDeleteTag = null  }: ITagPackProps) =>
-    <Tags articleTags={ articleTags } allTags={ allTags } onSaveTags = { onSaveTags } onDeleteTag={ onDeleteTag }/>;
+        <Tags articleTags={ articleTags }
+              allTags={ allTags }
+              helpMode={ helpMode }
+              onSaveTags = { onSaveTags }
+              onDeleteTag={ onDeleteTag }/>;
 
 
 const TagsPack = connect(mapStateToPropsTags, mapDispatchToPropsTags)(TagsPck);
@@ -63,10 +71,10 @@ class Tag extends React.Component<ITagProps, {}> {
     }
 }
 
-
 interface ITagsProps extends React.Props<any> {
     articleTags: ITag[];
     allTags: ITag[];
+    helpMode: boolean;
     onSaveTags: (tags: string) => void;
     onDeleteTag: (tagId: number) => void;
 }
@@ -132,24 +140,23 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
     }
 
     render() {
-        let { foundTags } = this.state;
-        let { articleTags, onDeleteTag  } = this.props;
-        return <H.FormAutocomplete><H.FAInput>
-            <H.ShiftDown><TagsIcon /></H.ShiftDown>
-                { articleTags.map(tag => <H.ShiftRight key={tag.id}>
+        const { foundTags } = this.state;
+        const { articleTags, onDeleteTag, helpMode  } = this.props;
+        return  <H.FormAutocompleteTags
+                    tooltip={ helpMode ? Tooltips.TAGS_TOOLTIP : ""}
+                    icon= {<TagsIcon />}
+                    tags={ articleTags.map(tag =>
                                             <Tag tag={tag}
                                                  closable={true}
                                                  key={tag.id}
                                                  onDelete={ onDeleteTag }/>
-                                          </H.ShiftRight>)}
-            <H.Input placeholder="type tags here"
-                   onChange = {this.onchange}
-                   onKeyDown = {this.onkeydown}/>
-            { (foundTags === null) || ( foundTags.length === 0) ? null :
-            <H.FAList><H.Grey><H.Left><H.ShiftDown>Tags found: </H.ShiftDown></H.Left></H.Grey>
-            {foundTags.map(tag => <Tag tag={tag} closable={false}  key={tag.id} onClick={this.onfoundTagClick}/>)}
-            </H.FAList> }
-        </H.FAInput></H.FormAutocomplete>;
+                                          ) }
+                    foundTags = {(foundTags === null) || ( foundTags.length === 0) ? null
+                         : foundTags.map(tag => <Tag tag={tag} closable={false}  key={tag.id} onClick={this.onfoundTagClick}/>) }
+                    placeholder= "type tags here"
+                    onChange = {this.onchange}
+                    onKeyDown = {this.onkeydown}
+                />;
     }
 };
 

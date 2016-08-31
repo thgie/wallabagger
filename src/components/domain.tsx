@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import * as Actions  from "../actions";
 
 interface IDomainProps extends React.Props<any> {
+    helpMode: boolean;
     domainName: string;
     onClick: () => void;
 }
@@ -12,7 +13,8 @@ interface IDomainProps extends React.Props<any> {
 function mapStateToProps (state: any)
 {
     return {
-        domainName: state.article.domain_name
+        domainName: state.article.domain_name,
+        helpMode:  state.helpMode
     };
 };
 
@@ -22,10 +24,13 @@ function mapDispatchToProps (dispatch: any) {
         };
 }
 
-const Domain_ = ({domainName= "wallabag.org", 
-                  onClick = null }: IDomainProps) =>
-    <H.Grey><H.Clickable onClick={ onClick }>{domainName}</H.Clickable></H.Grey>;
+const Domain_ = ({domainName= "wallabag.org", helpMode = false,  onClick = null }: IDomainProps) =>
 
+    <H.Grey><H.Clickable onClick={ onClick }>
+        <H.ToolTip tooltip="click to open original page" enabled={ helpMode }>
+            {domainName}
+        </H.ToolTip >
+    </H.Clickable></H.Grey>;
 const Domain = connect(mapStateToProps, mapDispatchToProps)(Domain_);
 
 export { Domain };

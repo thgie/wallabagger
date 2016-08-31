@@ -32,7 +32,9 @@ interface ITitlePackState {
 
 const Title = ({title = "test title", helpMode = false, onClick = null}: ITitleProps) =>
          <H.CardHeader><H.Clickable onClick = { onClick }><H.BigBlue>
-            <H.Tooltip tooltip="Click to open saved article" enabled={ helpMode }>{title}</H.Tooltip>
+            <H.ToolTip tooltip="Click to open saved article" enabled={ helpMode }>
+            {title}
+            </H.ToolTip>
         </H.BigBlue></H.Clickable></H.CardHeader>;
 
 
@@ -58,8 +60,7 @@ class TitleEdit extends React.Component<ITitleEditProps, ITitleEditState> {
     }
 }
 
-function mapStateToPropsTitle (state: any)
-{
+function mapStateToPropsTitle (state: any) {
     return {
         editMode: state.editMode,
         helpMode: state.helpMode,
@@ -88,6 +89,6 @@ const TitlePck = ({
         : <Title title= { title } helpMode={helpMode} onClick={ onClick }/>;
 };
 
-const TitlePack = connect(mapStateToPropsTitle,mapDispatchToPropsTitle)(TitlePck);
+const TitlePack = connect(mapStateToPropsTitle, mapDispatchToPropsTitle)(TitlePck);
 
 export { TitlePack };        
