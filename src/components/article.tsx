@@ -3,7 +3,7 @@ import * as React from "react";
 
 import Picture from "./Picture";
 import { TitlePack } from "./Title";
-import { Domain } from "./Domain";
+import Domain from "./domain";
 import { IconPack } from "./Icons";
 import { TagsPack } from "./Tags";
 import * as H from "./helpers";

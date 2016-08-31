@@ -7,11 +7,14 @@ interface IPictureProps extends React.Props<any> {
     url: string;
 }
 
-const mapStateToProps = (state: any) => ({ url: state.article.preview_picture });
+const mapStateToProps =  (state: any) => {
+    return {
+        url: state.article.preview_picture
+    };
+};
 
-const Picture_ = ({ url = "img/wallabag-icon-128.png"}: IPictureProps) =>
-<CardImage>
-   <ImgResponsive src={ url } />
-</CardImage>;
+const Picture: React.StatelessComponent<IPictureProps> = ({ url= "" }: IPictureProps) =>
+        <CardImage><ImgResponsive src={ url } /></CardImage>;
 
-export default connect(mapStateToProps)(Picture_);
+
+export default connect(mapStateToProps)(Picture);

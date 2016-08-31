@@ -3,6 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import * as H from "./helpers";
 import * as Actions  from "../actions";
+import * as Tootips from "../constants/tooltips";
 
 interface ITitleProps extends React.Props<any> {
     title: string;
@@ -31,12 +32,9 @@ interface ITitlePackState {
 
 
 const Title = ({title = "test title", helpMode = false, onClick = null}: ITitleProps) =>
-         <H.CardHeader><H.Clickable onClick = { onClick }><H.BigBlue>
-            <H.ToolTip tooltip="Click to open saved article" enabled={ helpMode }>
+         <H.CardHeader tooltip={ helpMode ? Tootips.TITLE_TOOLTIP : ""}><H.Clickable onClick = { onClick }><H.BigBlue>
             {title}
-            </H.ToolTip>
-        </H.BigBlue></H.Clickable></H.CardHeader>;
-
+        </H.BigBlue></H.Clickable></H.CardHeader>
 
 class TitleEdit extends React.Component<ITitleEditProps, ITitleEditState> {
     constructor(props: ITitleEditProps) {

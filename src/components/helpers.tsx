@@ -4,7 +4,7 @@ import * as classnames from "classnames";
 // import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 export const Card = ({ children = null }) => <div className="card">{ children }</div>;
-export const CardHeader = ({ children = null }) => <div className="card-header">{ children }</div>;
+export const CardHeader = ({ children = null, tooltip = "" }) => <div className={classnames( "card-header", tooltip === "" ? "" :"tooltip")} data-tooltip={ tooltip }>{ children }</div>;
 export const CardFooter = ({ children = null }) => <div className="card-footer">{ children }</div>;
 export const CardBody = ({ children = null }) => <div className="card-body">{ children }</div>;
 export const CardImage = ({ children = null }) => <div className="card-image">{ children }</div>;
@@ -21,7 +21,7 @@ export const BigBlue = ({ children = null }) => <span style={{
 export const Centered = ({ children = null }) => <span className="centered">{ children }</span>;
 
 
-export const Grey = ({ children = null }) => <span className="card-meta">{ children }</span>;
+export const Grey = ({ children = null }) => <span className="card-meta" >{ children }</span>;
 export const Clickable = ({ children = null, onClick = null }) => <span style={{cursor: "pointer"}} onClick={ onClick }>{ children }</span>;
 
 export const Left  = ({ children = null }) => <span className="float-left">{ children }</span>;
@@ -45,6 +45,8 @@ export const ButtonLink = ({ children = null, onClick = null }) => <button class
 export const ButtonPrimary = ({ children = null, onClick = null }) => <button className="btn btn-primary"  onClick = { onClick }>{ children }</button>;
 export const Chip = ({ children = null }) => <span className="chip-sm chip-name">{children}</span>;
 export const Cross = ({ onClick = null }) => <button className="btn btn-clear" onClick={onClick}></button>;
+
+export const Tooltip = ({ children = null, tooltip = "" }) => <span className={classnames( tooltip === "" ? "" :"tooltip")} data-tooltip={ tooltip }>{children}</span>;
 
  export const FormAutocompleteTags = ({ icon = null, tags = null, foundTags = null,
      placeholder = "", onChange = null, onKeyDown = null, tooltip= ""
