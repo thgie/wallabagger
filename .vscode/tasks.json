@@ -6,10 +6,12 @@
     "isShellCommand": true,
     "showOutput": "always",
     "suppressTaskName": true,
+    "echoCommand": true,
     "tasks": [
         {
             "taskName": "build",
-            "args": ["run-script build"]
+            "args": ["run build"],
+            "isBuildCommand": true
         },
         {
             "taskName": "start",
@@ -24,8 +26,13 @@
             "args": ["update"]
         },
         {
+            "taskName": "version",
+            "args": ["-v"]
+        },
+        {
             "taskName": "test",
             "args": ["run", "test"]
         }
+        
     ]
 }

@@ -4,10 +4,11 @@
         "sourceMap": true,
         "noImplicitAny": true,
         "module": "commonjs",
-        "target": "es6",
+        "target": "ES6",
         "jsx": "react",
-        "experimentalDecorators": true
-    },
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
+        },
     "files": [
         "./typings/index.d.ts",
         "./src/index.tsx"
