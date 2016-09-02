@@ -1,4 +1,4 @@
-export const TAGS_TOOLTIP = "Type new tag, end with ',' ';' space or enter. Right arrow adds first found tag. To delete tag click cross";
+export const TAGS_TOOLTIP = "Type new tag, end with ',' ';' space or enter. Right arrow enumerates found tags. To delete tag click cross";
 export const HELP_TOOLTIP = "Toggle help tooltips";
 export const DELETE_TOOLTIP = "Click to delete article";
 export const FAVORITE_TOOLTIP = "Click to toggle favorite";

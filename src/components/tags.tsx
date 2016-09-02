@@ -81,6 +81,8 @@ interface ITagsProps extends React.Props<any> {
 
 interface ITagsState {
     tagsSrt: string;
+    search: string;
+    index: number;
     foundTags: ITag[];
 }
 
@@ -88,11 +90,18 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
 
     constructor(props: ITagsProps) {
         super(props);
-        this.state = {foundTags: [], tagsSrt: props.articleTags.map(tag => tag.label).join(",")};
+        this.state = {foundTags: [], tagsSrt: props.articleTags.map(tag => tag.label).join(","), search: "", index: -1 };
         this.tagExists = this.tagExists.bind(this);
         this.onchange = this.onchange.bind(this);
         this.onkeydown = this.onkeydown.bind(this);
         this.onfoundTagClick = this.onfoundTagClick.bind(this);
+        this.ondeletetag = this.ondeletetag.bind(this);
+        this.saveHtml = this.saveHtml.bind(this);
+    }
+
+    saveHtml(param: string): string {
+        const map: any = { "&"  : "&amp;", "\'" : "&#039;", "\"" : "&quot;", "<"  : "&lt;", ">"  : "&gt;"  };
+        return param.replace(/[<'&">]/g, symb => map[symb]);
     }
 
     onchange(e: Event) {
@@ -103,8 +112,10 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
            { tagsSrt: `${this.props.articleTags.map(tag => tag.label).join(",")}${inputValue === "" ? "" :","}${inputValue}`,
             foundTags: this.props.allTags.filter(tag =>
                       ( this.props.articleTags.map(t => t.id).indexOf(tag.id) === -1 )
-                  &&  ( inputValue.length >= 3 && tag.label.indexOf(inputValue) !== -1)
-                  || (inputValue === tag.label) && ( ! this.tagExists(inputValue) )
+                  &&  ( this.state.search.length >= 3 && tag.label.indexOf(this.state.search) !== -1)
+                  || (this.state.search === tag.label) && ( ! this.tagExists(this.state.search) )
+                //   &&  ( inputValue.length >= 3 && tag.label.indexOf(inputValue) !== -1)
+                //   || (inputValue === tag.label) && ( ! this.tagExists(inputValue) )
             )
               }) );
        }
@@ -118,19 +129,25 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
     onkeydown(e: KeyboardEvent) {
         const keyCode = e.keyCode;
         const key = e.key;
-        const value = (e.currentTarget as HTMLInputElement).value;
+        const element = (e.currentTarget as HTMLInputElement);
+        const value = element.value;
+        const cursorAtEnd: boolean = value.slice(0, element.selectionStart).length === value.length;
         if ((keyCode === 32 || keyCode === 13 || key === "," || key === ";")
              && (!this.tagExists(value)) ) {
             (e.currentTarget as HTMLInputElement).value = "";
             this.setState( Object.assign(this.state,   {foundTags: []}  ));
-            this.props.onSaveTags(this.state.tagsSrt);
+            this.props.onSaveTags( this.saveHtml(this.state.tagsSrt));
+            return;
         }
-        if ( (key === "ArrowRight") && ( this.state.foundTags.length > 0 ) ) {
-            (e.currentTarget as HTMLInputElement).value = "";
-            const ftag: ITag = this.state.foundTags[0];
-            this.setState( Object.assign(this.state,  {foundTags: []}  ));
-            this.props.onSaveTags( `${this.props.articleTags.map(tag => tag.label).join(",")},${ftag.label}` );
+        if ( (key === "ArrowRight") && ( this.state.foundTags.length > 0 ) && ( cursorAtEnd )) {
+            const { foundTags, index } = this.state;
+            const ftag: ITag = foundTags[ foundTags.length - 1 > index + 1 ? index + 1 : foundTags.length - 1 ];
+            (e.currentTarget as HTMLInputElement).value = ftag.label;
+            this.onchange(e);
+            this.setState( Object.assign(this.state,   { index: index + 1}  ));
+            return;
         }
+        this.setState( Object.assign(this.state,   { search: value + key, index: -1}  ));
     }
 
     onfoundTagClick(id: number) {
@@ -138,6 +155,17 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
         const tsrt: string =  `${this.props.articleTags.map(tag => tag.label).join(",")},${ftag.label}`;
         this.props.onSaveTags(tsrt);
     }
+
+    ondeletetag(id: number) {
+        //    this.setState( Object.assign(this.state,
+        //    { tagsSrt: `${this.props.articleTags.map(tag => tag.label).join(",")}${inputValue === "" ? "" :","}${inputValue}`,
+        //     foundTags: this.props.allTags.filter(tag =>
+        //               ( this.props.articleTags.map(t => t.id).indexOf(tag.id) === -1 )
+        //           &&  ( inputValue.length >= 3 && tag.label.indexOf(inputValue) !== -1)
+        //           || (inputValue === tag.label) && ( ! this.tagExists(inputValue) )
+        //     )
+        //       }) );
+                }
 
     render() {
         const { foundTags } = this.state;
