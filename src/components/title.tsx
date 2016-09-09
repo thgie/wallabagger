@@ -32,14 +32,14 @@ interface ITitlePackState {
 
 
 const Title = ({title = "test title", helpMode = false, onClick = null}: ITitleProps) =>
-         <H.CardHeader tooltip={ helpMode ? Tootips.TITLE_TOOLTIP : ""}><H.Clickable onClick = { onClick }><H.BigBlue>
-            {title}
-        </H.BigBlue></H.Clickable></H.CardHeader>
+        <H.Tooltip tooltip={ helpMode ? Tootips.TITLE_TOOLTIP : ""}><H.Clickable onClick = { onClick }><H.BigBlue>
+        {title}
+    </H.BigBlue></H.Clickable></H.Tooltip>;
 
 class TitleEdit extends React.Component<ITitleEditProps, ITitleEditState> {
-    constructor(props: ITitleEditProps) {
-        super(props);
-        this.state = {title: props.title};
+constructor(props: ITitleEditProps) {
+    super(props);
+    this.state = {title: props.title};
     }
     titleChange(e: Event) {
         this.setState( { title: (e.target as HTMLTextAreaElement).value } );
@@ -50,11 +50,11 @@ class TitleEdit extends React.Component<ITitleEditProps, ITitleEditState> {
     }
     render() {
         const { title, Cancel } = this.props;
-        return <H.CardBody>
+        return <div>
             <H.Text value={ this.state.title } onChange = { this.titleChange.bind(this) } ></H.Text>
             <H.ButtonLink onClick={ this.saveClick.bind(this)} >Save</H.ButtonLink>
             <H.ButtonLink onClick={Cancel}>Cancel</H.ButtonLink>
-        </H.CardBody>;
+        </div>;
     }
 }
 

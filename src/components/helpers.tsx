@@ -3,11 +3,23 @@ import * as React from "react";
 import * as classnames from "classnames";
 // import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
-export const Card = ({ children = null }) => <div className="card">{ children }</div>;
-export const CardHeader = ({ children = null, tooltip = "" }) => <div className={classnames( "card-header", tooltip === "" ? "" :"tooltip")} data-tooltip={ tooltip }>{ children }</div>;
-export const CardFooter = ({ children = null }) => <div className="card-footer">{ children }</div>;
-export const CardBody = ({ children = null }) => <div className="card-body">{ children }</div>;
-export const CardImage = ({ children = null }) => <div className="card-image">{ children }</div>;
+interface ITooltip extends React.Props<any> {
+    tooltip: string;
+}
+
+export const ToastInfo = ({ text = "" }) => <div className="toast">{text}</div>;
+export const ToastError = ({ text = ""}) => <div className="toast toast-danger">{text}</div>;
+
+// export const tooltip = (text: string) => (WrapedComponent: any) => <WrapedComponent {...this.props} data-tooltip={text}/>;
+
+export const Tooltip = ( {tooltip = "",  children = null } ) => <span className="tooltip" data-tooltip={tooltip }>{children}</span>;
+
+export const Card = (props: any) => <div className="card" {...props} />;
+
+export const CardHeader = (props: any) => <div className="card-header" {...props}/>;
+export const CardFooter = (props: any) => <div className="card-footer" {...props }/>;
+export const CardBody = (props: any) => <div className="card-body" {...props}/>;
+export const CardImage = (props: any) => <div className="card-image" {...props}/>;
 
 export const ImgResponsive = ({src = ""}) => <img src={ src } className="img-responsive" />;
 
@@ -46,7 +58,6 @@ export const ButtonPrimary = ({ children = null, onClick = null }) => <button cl
 export const Chip = ({ children = null }) => <span className="chip-sm chip-name">{children}</span>;
 export const Cross = ({ onClick = null }) => <button className="btn btn-clear" onClick={onClick}></button>;
 
-export const Tooltip = ({ children = null, tooltip = "" }) => <span className={classnames( tooltip === "" ? "" :"tooltip")} data-tooltip={ tooltip }>{children}</span>;
 
  export const FormAutocompleteTags = ({ icon = null, tags = null, foundTags = null,
      placeholder = "", onChange = null, onKeyDown = null, tooltip= ""

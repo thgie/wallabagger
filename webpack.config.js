@@ -1,11 +1,26 @@
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: { 
+        app: "./src/index.tsx",
+        opt: "./src/options.js"
+    },
     output: {
-        filename: "./js/bundle.js",
+        path: 'dist',
+        filename: '[name].js',
+        chunkFilename: '[id].js'
     },
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
+
+    devServer: {
+      contentBase: './dist',
+      info: true,
+      hot: false,
+      inline: true,
+      port: 9999
+    },
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
@@ -15,7 +30,9 @@ module.exports = {
     module: {
         loaders: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-            { test: /\.tsx?$/, loader: "ts-loader" }
+            { test: /\.tsx?$/, loader: "ts-loader" },
+            { test: /\.css$/,  loader: 'style-loader!css-loader', exclude: /node_modules/ },
+            { test: /\.(ttf|eot|woff|woff2|svg)\?(.*)$/i, loader: 'file-loader', exclude: /node_modules/ }
         ],
 
         preLoaders: [
@@ -32,4 +49,22 @@ module.exports = {
         "react": "React",
         "react-dom": "ReactDOM"
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            inject: 'body',
+            chunks: ['app'],
+            filename: 'index.html',
+            hash: true,
+            template: './src/index.html',
+            favicon: './src/favicon.ico'
+        }),
+        new HtmlWebpackPlugin({
+            inject: 'body',
+            chunks: ['opt'],
+            filename: 'options.html',
+            hash: true,
+            template: './src/options.html',
+            favicon: './src/favicon.ico'
+        }),
+        ]
 };

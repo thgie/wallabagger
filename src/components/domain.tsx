@@ -24,11 +24,13 @@ function mapDispatchToProps (dispatch: any) {
                 onClick: () => {dispatch(Actions.gotoOriginalPage()); }
         };
 }
-// @tooltip( Tootips.DOMAIN_TOOLTIP )
-// @connect(mapStateToProps, mapDispatchToProps)
-const Domain: React.StatelessComponent<IDomainProps> = ({ onClick = null, domainName = "", helpMode = false}: IDomainProps) => 
-   <H.Tooltip tooltip={ helpMode ? Tootips.DOMAIN_TOOLTIP : ""}>
-        <H.Grey><H.Clickable onClick={ onClick }>{domainName}</H.Clickable></H.Grey>
-    </H.Tooltip>;
+
+
+class Domain extends React.Component<IDomainProps, {}> {
+ render() {
+     const { onClick, domainName } = this.props;
+     return <H.Grey><H.Clickable onClick={ onClick }>{domainName}</H.Clickable></H.Grey>;
+}
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Domain);

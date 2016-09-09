@@ -51,16 +51,13 @@ const TagsPck = ({  articleTags = [], allTags = [], helpMode = false,
 const TagsPack = connect(mapStateToPropsTags, mapDispatchToPropsTags)(TagsPck);
 
 class Tag extends React.Component<ITagProps, {}> {
-    constructor(props: ITagProps) {
-        super(props);
-        this.deleteClick = this.deleteClick.bind(this);
-        this.onclick = this.onclick.bind(this);
-    }
-    onclick(e: MouseEvent) {
+
+    onclick = (e: MouseEvent) => {
         if ( (this.props.onClick !== null) && (this.props.onClick !== undefined) )
             this.props.onClick(this.props.tag.id);
     }
-    deleteClick(e: MouseEvent) {
+
+    deleteClick = (e: MouseEvent) => {
         this.props.onDelete(this.props.tag.id);
     }
     render() {

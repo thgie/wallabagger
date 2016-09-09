@@ -6,21 +6,25 @@ import { TitlePack } from "./Title";
 import Domain from "./domain";
 import { IconPack } from "./Icons";
 import { TagsPack } from "./Tags";
-import * as H from "./helpers";
+import { Card, CardHeader, CardFooter, CardBody } from "./helpers";
 import { ConfirmDelete } from "./modals";
 
 const Article = () =>
-<H.Card>
-    <Picture />
-    <TitlePack />
-    <H.CardFooter>
+<Card>
+    <CardHeader>
+       <Picture />
+    </CardHeader>
+    <CardBody>
+        <TitlePack />
+    </CardBody>
+    <CardFooter>
         <Domain />
         <IconPack />
-    </H.CardFooter>
-    <H.CardFooter>
+    </CardFooter>
+    <CardFooter>
         <TagsPack />
-    </H.CardFooter>
+    </CardFooter>
     <ConfirmDelete/>
-</H.Card>;
+</Card>;
 
 export default Article ;
