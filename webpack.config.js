@@ -1,4 +1,5 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     entry: { 
@@ -30,9 +31,14 @@ module.exports = {
     module: {
         loaders: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-            { test: /\.tsx?$/, loader: "ts" },
-            { test: /\.css$/,  loader: 'style!css', exclude: /node_modules/ },
-            { test: /\.(ttf|eot|woff|woff2|svg)\?(.*)$/i, loader: 'file', exclude: /node_modules/ }
+            { test: /\.tsx?$/, loader: "ts-loader" },
+            { test: /\.css$/,  
+              loader: ExtractTextPlugin.extract({
+                fallbackLoader: "style-loader",
+                loader: "css-loader"
+              }), 
+              exclude: /node_modules/ },
+            { test: /\.(ttf|eot|woff|woff2|svg)$/i, loader: 'file-loader', exclude: /node_modules/ }
         ],
 
         preLoaders: [
@@ -50,6 +56,7 @@ module.exports = {
         "react-dom": "ReactDOM"
     },
     plugins: [
+        new ExtractTextPlugin("styles.css"),
         new HtmlWebpackPlugin({
             inject: 'body',
             chunks: ['app'],
