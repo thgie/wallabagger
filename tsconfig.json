@@ -3,7 +3,6 @@
         "outDir": "./js/",
         "sourceMap": true,
         "noImplicitAny": true,
-        "module": "commonjs",
         "target": "ES6",
         "jsx": "react",
         "experimentalDecorators": true,

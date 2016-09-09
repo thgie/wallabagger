@@ -1,5 +1,3 @@
-import { Iterable } from "immutable";
-
 export const isDebug: boolean = true;
 
 export const isExtension = (): boolean => (window.chrome.extension !== undefined);
