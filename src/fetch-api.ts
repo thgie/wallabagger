@@ -9,7 +9,7 @@ function getJson(j: any) {
     return j.json();
 }
 
-function getRequestOptions(rmethod: string, rheaders: HeaderInit, content: BodyInit): RequestInit {
+function getRequestOptions(rmethod: string, rheaders: Headers, content: BodyInit): RequestInit {
 
     let options: RequestInit = {
         method: rmethod,
@@ -25,7 +25,7 @@ function getRequestOptions(rmethod: string, rheaders: HeaderInit, content: BodyI
     return options;
 
 }
-function getNotAuhorizedHeaders(): HeaderInit {
+function getNotAuhorizedHeaders(): Headers {
     const headers = new Headers();
     headers.append("Accept", "application/json");
     headers.append("Content-Type", "application/json");
@@ -33,7 +33,7 @@ function getNotAuhorizedHeaders(): HeaderInit {
     return headers;
 }
 
-function getAuhorizedHeaders(token: string): HeaderInit {
+function getAuhorizedHeaders(token: string): Headers {
     const headers = new Headers();
     headers.append("Authorization", `Bearer ${token}`);
     headers.append("Accept", "application/json");

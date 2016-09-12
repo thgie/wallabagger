@@ -2,7 +2,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { ITag } from "../wallabag-api";
-import { TagsIcon } from "./Icons";
+import { TagsIcon } from "./icons";
 import * as H from "./helpers";
 import * as Actions  from "../actions";
 import * as Tooltips from "../constants/tooltips";

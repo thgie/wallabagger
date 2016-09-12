@@ -2,8 +2,8 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { EAppStatus } from "../consts";
-import Article from "article";
-import { ToastInfo, ToastError } from "helpers";
+import Article from "./article";
+import { ToastInfo, ToastError } from "./helpers";
 
 interface IAppProps extends React.Props<any> {
     appStatus: EAppStatus;
