@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --progress -d",
-    "start": "webpack --progress -d && http-server.cmd dist -o \"C:\\Users\\yevdokimov\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome.exe\""
+    "start": "webpack -d && http-server dist"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,8 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "typescript": "^2.1.0-dev.20160909"
   },
   "devDependencies": {
     "css-loader": "^0.25.0",

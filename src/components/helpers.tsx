@@ -12,7 +12,7 @@ export const ToastError = ({ text = ""}) => <div className="toast toast-danger">
 
 // export const tooltip = (text: string) => (WrapedComponent: any) => <WrapedComponent {...this.props} data-tooltip={text}/>;
 
-export const Tooltip = ( {tooltip = "",  children = null } ) => <span className="tooltip" data-tooltip={tooltip }>{children}</span>;
+export const Tooltip = ( tooltip: string, props: any ) => <span className="tooltip" data-tooltip={tooltip } {...props} />;
 
 export const Card = (props: any) => <div className="card" {...props} />;
 
@@ -23,40 +23,42 @@ export const CardImage = (props: any) => <div className="card-image" {...props}/
 
 export const ImgResponsive = ({src = ""}) => <img src={ src } className="img-responsive" />;
 
-export const BigBlue = ({ children = null }) => <span style={{
+export const BigBlue = (props: any) => <span style={{
                 color: "#039be5",
                 fontFamily: "Roboto, sans-serif",
                 fontSize: "24px",
-                fontWeight: "300"}}
-                >{ children }</span>;
+                fontWeight: "bolder"}} 
+                { ...props } />;
 
-export const Centered = ({ children = null }) => <span className="centered">{ children }</span>;
+export const Centered = (props: any) => <span className="centered"  {...props}/>;
 
 
-export const Grey = ({ children = null }) => <span className="card-meta" >{ children }</span>;
-export const Clickable = ({ children = null, onClick = null }) => <span style={{cursor: "pointer"}} onClick={ onClick }>{ children }</span>;
+export const Grey = (props: any) => <span className="card-meta" {...props}/>;
+export const Clickable = (props:any, onClick?: any) => <span style={{cursor: "pointer"}} onClick={ onClick } {...props}/>;
 
-export const Left  = ({ children = null }) => <span className="float-left">{ children }</span>;
-export const Right = ({ children = null }) => <span className="float-right">{ children }</span>;
+export const Left  = (props:any) => <span className="float-left" {...props}/>;
+export const Right = (props:any) => <span className="float-right" {...props}/>;
 
-export const ShiftDown10 = ({ children = null }) => <span className="mt-10" style={{display: "inline-block"}} >{ children }</span>;
+export const ShiftDown10 = (props:any) => <span className="mt-10" style={{display: "inline-block"}}  {...props}/>;
 
-export const ShiftDown = ({ children = null }) => <span style={{display: "inline-block", marginTop: "5px"}}>{ children }</span>;
-export const ShiftRight = ({ children = null }) => <span style={{marginLeft: "5px"}}>{ children }</span>;
+export const ShiftDown = (props:any) => <span style={{display: "inline-block", marginTop: "5px"}} {...props}/>;
+export const ShiftRight = (props:any) => <span style={{marginLeft: "5px"}}  {...props}/>;
 
-export const Icn = ({name = "", onClick = null, tooltip = ""}) => <span className ={ classnames("icon", name, tooltip === "" ? "" :"tooltip") } onClick = { onClick }  data-tooltip={ tooltip }></span >;
+export const Icn = (name: string, tooltip?: string, onClick?: any) => <span className ={ classnames("icon", name, tooltip === "" ? "" :"tooltip") } onClick = { onClick }  data-tooltip={ tooltip }></span >;
 
-export const FormAutocomplete = ({ children = null, tooltip= "" }) => <div className={classnames("form-autocomplete", "md-10", tooltip === "" ? "" :"tooltip") } data-tooltip={ tooltip }>{ children }</div>;
-export const FAInput = ({ children = null }) => <div className="form-autocomplete-input">{ children }</div>;
-export const FAList = ({ children = null }) => <ul className="form-autocomplete-list">{ children }</ul>;
-export const Input = ({ placeholder = "", onChange = null, onKeyDown = null}) => <input className="form-input" type="text" placeholder={ placeholder } onChange = { onChange } onKeyDown={ onKeyDown }/>;
-export const Text = ({ value = "", onChange = null } ) => <textarea className="form-input" rows="3" value={value} onChange={ onChange }></textarea>;
+export const FormAutocomplete = ( tooltip: string, children?: any) => <div className={classnames("form-autocomplete", "md-10", tooltip === "" ? "" :"tooltip") } data-tooltip={ tooltip }>{ children }</div>;
+export const FAInput = (props:any) => <div className="form-autocomplete-input" {...props} />;
+export const FAList = (props:any) => <ul className="form-autocomplete-list" {...props} />;
+export const Input = ( placeholder: string, onChange?: any, onKeyDown?: any) => <input className="form-input" type="text" placeholder={ placeholder } onChange = { onChange } onKeyDown={ onKeyDown }/>;
+export const Text = (value: string, onChange?: any ) => <textarea className="form-input" 
+ value={value} onChange={ onChange }></textarea>;
 
-export const ButtonClear = ({ children = null, onClick = null }) => <button className="btn btn-clear"  onClick = { onClick }>{ children }</button>;
-export const ButtonLink = ({ children = null, onClick = null }) => <button className="btn btn-link"  onClick = { onClick }>{ children }</button>;
-export const ButtonPrimary = ({ children = null, onClick = null }) => <button className="btn btn-primary"  onClick = { onClick }>{ children }</button>;
-export const Chip = ({ children = null }) => <span className="chip-sm chip-name">{children}</span>;
-export const Cross = ({ onClick = null }) => <button className="btn btn-clear" onClick={onClick}></button>;
+export const ButtonClear = (onClick?:any, props?:any) => <button className="btn btn-clear"  onClick = { onClick } {...props} />;
+export const ButtonLink = (onClick?:any, props?:any) => <button className="btn btn-link"  onClick = { onClick } {...props} />;
+export const ButtonPrimary = (onClick?:any, props?:any) => <button className="btn btn-primary"  onClick = { onClick } {...props} />;
+
+export const Chip = (props:any) => <span className="chip-sm chip-name" {...props} />;
+export const Cross = ( onClick: any) => <button className="btn btn-clear" onClick={onClick}></button>;
 
 
  export const FormAutocompleteTags = ({ icon = null, tags = null, foundTags = null,
@@ -83,22 +85,23 @@ export const Cross = ({ onClick = null }) => <button className="btn btn-clear" o
             </div>
          </div>;
 
-export const ModalTitle = ({children = null}) =>
-                <div className="modal-title">{children}</div>;
+export const ModalTitle = (props:any) =>
+                <div className="modal-title"  {...props} />;
 
-export const ModalCard = ({children = null, active = false}) =>
+export const ModalCard = (active: boolean, props?: any) =>
      <div className={active ? "modal modal-sm active" : "modal modal-sm" }>
         <div className="modal-overlay"></div>
-        <div className="modal-container">{ children }</div>
+        <div className="modal-container" {...props} />
     </div>;
 
-export const ModalHeader = ({children = null}) =>
-            <div className="modal-header">{children}</div>;
 
-export const ModalBody = ({children = null}) =>
+export const ModalHeader = (props:any) =>
+            <div className="modal-header" {...props} />;
+
+export const ModalBody = (children: any) =>
             <div className="modal-body">
                 <div className="content">{children}</div>
             </div>;
 
-export const ModalFooter = ({children = null}) =>
-            <div className="modal-footer">{children}</div>; ;
+export const ModalFooter = (props:any) =>
+            <div className="modal-footer" {...props} />;

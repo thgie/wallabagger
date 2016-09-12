@@ -6,7 +6,7 @@
         "target": "ES6",
         "jsx": "react",
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "baseUrl": "./src"
         },
     "files": [
         "./typings/index.d.ts",
