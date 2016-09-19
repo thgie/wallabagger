@@ -1,14 +1,13 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
 import { connect } from "react-redux";
-import * as H from "./helpers";
+import { IClassable, IClickable, BigBlue, Clickable, Tooltip, Text, Button } from "./helpers";
 import * as Actions  from "../actions";
-import * as Tootips from "../constants/tooltips";
+import * as Tootips from "constants/tooltips";
 
-interface ITitleProps extends React.Props<any> {
+interface ITitleProps extends React.Props<any>, IClickable, IClassable {
     title: string;
     helpMode: boolean;
-    onClick: () => void;
 }
 
 interface ITitleEditProps extends React.Props<any> {
@@ -21,39 +20,42 @@ interface ITitleEditState {
     title: string;
 }
 
-interface ITitlePackState {
+interface ITitlePackState extends React.Props<any>, IClickable {
     editMode: boolean;
     helpMode: boolean;
     title: string;
     onSaveClick: () => void;
     onCancelClick: () => void;
-    onClick: () => void;
 }
 
-
-const Title = ({title = "test title", helpMode = false, onClick = null}: ITitleProps) =>
-        <H.Tooltip tooltip={ helpMode ? Tootips.TITLE_TOOLTIP : ""}><H.Clickable onClick = { onClick }><H.BigBlue>
-        {title}
-    </H.BigBlue></H.Clickable></H.Tooltip>;
+@BigBlue
+@Clickable
+@Tooltip(Tootips.TITLE_TOOLTIP)
+class Title extends React.Component<ITitleProps, {}> {
+    render() {
+        const { title, onClick, classes } = this.props;
+        return <span onClick={ onClick } className={ classes }>{ title }</span>;
+    }
+};
 
 class TitleEdit extends React.Component<ITitleEditProps, ITitleEditState> {
 constructor(props: ITitleEditProps) {
     super(props);
     this.state = {title: props.title};
     }
-    titleChange(e: Event) {
+    titleChange = (e: Event) => {
         this.setState( { title: (e.target as HTMLTextAreaElement).value } );
     }
-    saveClick() {
+    saveClick = () => {
         const { Save } = this.props;
         Save(this.state.title);
     }
     render() {
         const { title, Cancel } = this.props;
         return <div>
-            <H.Text value={ this.state.title } onChange = { this.titleChange.bind(this) } ></H.Text>
-            <H.ButtonLink onClick={ this.saveClick.bind(this)} >Save</H.ButtonLink>
-            <H.ButtonLink onClick={Cancel}>Cancel</H.ButtonLink>
+            <Text value={ this.state.title } onChange = { this.titleChange } ></Text>
+            <Button link onClick={ this.saveClick } >Save</Button>
+            <Button link onClick={Cancel}>Cancel</Button>
         </div>;
     }
 }
@@ -82,9 +84,9 @@ const TitlePck = ({
     onCancelClick= null,
     onClick = null
 }: ITitlePackState) =>  {
-   return editMode
-        ? <TitleEdit title = { title } Save = {onSaveClick} Cancel = {onCancelClick} />
-        : <Title title= { title } helpMode={helpMode} onClick={ onClick }/>;
+   return  editMode
+         ? <TitleEdit title = { title } Save = {onSaveClick} Cancel = {onCancelClick} />
+         : <Title title= { title } helpMode={helpMode} onClick={ onClick }/>;
 };
 
 const TitlePack = connect(mapStateToPropsTitle, mapDispatchToPropsTitle)(TitlePck);

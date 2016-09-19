@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const path = require("path");
 
 module.exports = {
     entry: { 
@@ -25,7 +26,10 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ["", ".ts", ".tsx", ".js"]
+        extensions: ["", ".ts", ".tsx", ".js"],
+        alias: {
+        "constants": path.resolve('./src/constants')
+        }
     },
 
     module: {

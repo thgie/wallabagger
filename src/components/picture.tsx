@@ -1,9 +1,9 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
 import { connect } from "react-redux";
-import { CardImage, ImgResponsive } from "./helpers";
+import { CardImage, ImgResponsive, IClassable } from "./helpers";
 
-interface IPictureProps extends React.Props<any> {
+interface IPictureProps extends React.Props<any>, IClassable {
     url: string;
 }
 
@@ -13,8 +13,15 @@ const mapStateToProps =  (state: any) => {
     };
 };
 
-const Picture: React.StatelessComponent<IPictureProps> = ({ url= "" }: IPictureProps) =>
-        <CardImage><ImgResponsive src={ url } /></CardImage>;
+@ImgResponsive
+@CardImage
+class Picture extends  React.Component<IPictureProps,{}>  {
+    render() {
+        const { url, classes } = this.props;
+        return <img src={ url } className={ classes }/>; 
+    }
+}
+        
 
 
 export default connect(mapStateToProps)(Picture);

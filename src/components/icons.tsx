@@ -3,7 +3,7 @@ import * as React from "react";
 import * as H from "./helpers"; // { Grey, Clickable, Icn, ShiftDown, ShiftRight, Right }
 import * as Actions  from "../actions"; // { toggleHelpMode, toggleStarred, toggleArchived, deleteArticle, toggleEditMode }
 import { connect } from "react-redux";
-import * as Tooltips from "../constants/tooltips";
+import * as Tooltips from "constants/tooltips";
 
 interface ISimpleIconProps extends React.Props<any> {
     tooltip?: string;
@@ -76,9 +76,9 @@ const IconPack =  connect( mapStateToPropsIcons, mapDispatchToPropsIcons)(IconPc
 // ----------------------------------------------
 // base Icon
 const Icon = ({iconName = "", onClick = null, tooltip = ""}: IIconProps) =>
-    <H.ShiftRight><H.Grey><H.Clickable><H.Icn name={iconName}
-                                              onClick = { onClick }
-                                               tooltip = { tooltip }/></H.Clickable></H.Grey></H.ShiftRight>;
+    <H.ShiftRight><H.Grey_>
+        <H.Icn name={iconName} tooltip = { tooltip } onClick = { onClick }/>
+    </H.Grey_></H.ShiftRight>;
 
 // ----------------------------------------------
 // Edit icon 

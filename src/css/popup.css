@@ -7,3 +7,14 @@ body {
 .chip-sm {
     margin-left: 5px;
 }
+
+.clickable {
+   cursor: pointer; 
+}
+
+.bigBlue {
+    color: #039be5;
+    font-family: "Roboto, sans-serif";
+    font-size: 24px;
+    font-weight: 300;
+}

@@ -7,8 +7,9 @@
         "jsx": "react",
         "experimentalDecorators": true,
         "baseUrl": "./src",
-        "suppressImplicitAnyIndexErrors": true,
-        "noImplicitAny": true
+        "paths": {
+            "constants/*": ["./src/constants/*"]
+        }
         },
     "files": [
         "./typings/index.d.ts",

@@ -1,14 +1,13 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
-import * as H from "./helpers";
+import { IClassable, IClickable, Grey, Clickable, Tooltip } from "./helpers";
 import { connect } from "react-redux";
 import * as Actions  from "../actions";
-import * as Tootips from "../constants/tooltips";
+import * as Tootips from "constants/tooltips";
 
-interface IDomainProps extends React.Props<any> {
+interface IDomainProps extends React.Props<any>, IClassable, IClickable {
     helpMode: boolean;
     domainName: string;
-    onClick: () => void;
 }
 
 function mapStateToProps (state: any)
@@ -26,11 +25,14 @@ function mapDispatchToProps (dispatch: any) {
 }
 
 
+@Grey
+@Clickable
+@Tooltip(Tootips.DOMAIN_TOOLTIP)
 class Domain extends React.Component<IDomainProps, {}> {
  render() {
-     const { onClick, domainName } = this.props;
-     return <H.Grey><H.Clickable onClick={ onClick }>{domainName}</H.Clickable></H.Grey>;
-}
+     const { onClick, domainName, classes } = this.props;
+     return <span onClick={ onClick } className={ classes }>{domainName}</span>;
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Domain);

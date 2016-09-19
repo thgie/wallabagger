@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import { ITag } from "../wallabag-api";
 import { TagsIcon } from "./icons";
 import * as H from "./helpers";
-import * as Actions  from "../actions";
-import * as Tooltips from "../constants/tooltips";
+import * as Actions  from "actions";
+import * as Tooltips from "constants/tooltips";
 
 
 interface ITagProps extends React.Props<any> {
@@ -52,7 +52,7 @@ const TagsPack = connect(mapStateToPropsTags, mapDispatchToPropsTags)(TagsPck);
 
 class Tag extends React.Component<ITagProps, {}> {
 
-    onclick = (e: MouseEvent) => {
+    onclick = (e: React.MouseEvent) => {
         if ( (this.props.onClick !== null) && (this.props.onClick !== undefined) )
             this.props.onClick(this.props.tag.id);
     }
@@ -62,9 +62,9 @@ class Tag extends React.Component<ITagProps, {}> {
     }
     render() {
         const { tag, closable } = this.props;
-        return <H.Clickable onClick={this.onclick}>
+        return <H.Clickable_ onClick={ this.onclick }>
             <H.Chip>{tag.label}{ closable ? <H.Cross onClick={this.deleteClick}/> : null }</H.Chip>
-        </H.Clickable> ;
+        </H.Clickable_> ;
     }
 }
 

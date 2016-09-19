@@ -1,8 +1,8 @@
-import { EAppStatus } from "../consts";
-import * as ActionTypes from "../constants/ActionTypes";
-import { WallabagSetup } from "../setup";
-import { WallabagApi, IWallabagArticle, ITag } from "../wallabag-api";
-import * as utils from "../utils";
+import { EAppStatus } from "constants/consts";
+import * as ActionTypes from "constants/ActionTypes";
+import { WallabagSetup } from "./setup";
+import { WallabagApi, IWallabagArticle, ITag } from "./wallabag-api";
+import * as utils from "./utils";
 
 const setStatus = (status: EAppStatus, message: string): any => ({
     type: ActionTypes.SET_STATUS,

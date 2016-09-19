@@ -1,6 +1,6 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as ActionTypes from "../constants/ActionTypes";
-import { EAppStatus } from "../consts";
+import { EAppStatus } from "constants/consts";
 import { EmptySetup } from "../setup";
 import { WallabagApi, ITag } from "../wallabag-api";
 

@@ -21,10 +21,6 @@ const Article = () =>
         <Domain />
         <IconPack />
     </CardFooter>
-    <CardFooter>
-        <TagsPack />
-    </CardFooter>
-    <ConfirmDelete/>
 </Card>;
 
 export default Article ;

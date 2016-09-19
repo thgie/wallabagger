@@ -1,7 +1,7 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
-import * as H from "./helpers";
-import * as Actions from "../actions";
+import { Confirm } from "./helpers";
+import * as Actions from "actions";
 import { connect } from "react-redux";
 
 
@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 const ConfirmDelete_ = ({Active = false, onYesClick= null, onNoClick= null}: IConfirmDeleteProps) =>
-    <H.Confirm title="Please confirm delete"
+    <Confirm title="Please confirm delete"
              question="Are you sure?"
              YesNo={false}
              Active = {Active}
