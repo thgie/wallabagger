@@ -2,6 +2,12 @@
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+exports.tslint = {
+  test: /\.tsx?$/,
+  loader: 'tslint',
+  exclude: /node_modules/,
+};
+
 exports.tsx = {
   test: /\.tsx?$/,
   loader: 'ts-loader',
