@@ -1,7 +1,7 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
 import { connect } from "react-redux";
-import { EAppStatus } from "constants/consts";
+import { EAppStatus } from "../constants/consts";
 import Article from "./article";
 import { ToastInfo, ToastError } from "./helpers";
 

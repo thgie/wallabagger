@@ -1,6 +1,5 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
-import * as classnames from "classnames";
 // import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 interface IClassable {
@@ -84,7 +83,7 @@ interface IIcnProps extends React.Props<any> {
 
 export const Icn = ({ name= "", tooltip= "", onClick= null}: IIcnProps) => <span className ={ ["icon", name, tooltip === "" ? "" :"tooltip"  ].join(" ") } onClick = { onClick }  data-tooltip={ tooltip }></span >;
 
-export const FormAutocomplete = ( tooltip: string, children?: any) => <div className={classnames("form-autocomplete", "md-10", tooltip === "" ? "" :"tooltip") } data-tooltip={ tooltip }>{ children }</div>;
+export const FormAutocomplete = ( tooltip: string, children?: any) => <div className={["form-autocomplete", "md-10", tooltip === "" ? "" :"tooltip"].join(" ") } data-tooltip={ tooltip }>{ children }</div>;
 export const FAInput = (props: any) => <div className="form-autocomplete-input" {...props} />;
 export const FAList = (props: any) => <ul className="form-autocomplete-list" {...props} />;
 export const Input = ( placeholder: string, onChange?: any, onKeyDown?: any) => <input className="form-input" type="text" placeholder={ placeholder } onChange = { onChange } onKeyDown={ onKeyDown }/>;
@@ -118,7 +117,7 @@ interface IFATagsProps extends React.Props<any> {
 }
  export const FormAutocompleteTags = ( { icon = null, tags = null, foundTags = null,  placeholder = "",
                                          onChange = null, onKeyDown = null, tooltip = "" }: IFATagsProps  ) =>
-         <div className={classnames("form-autocomplete", "md-10", tooltip === "" ? "" :"tooltip")}  data-tooltip={ tooltip }>
+         <div className={["form-autocomplete", "md-10", tooltip === "" ? "" :"tooltip"].join(" ")}  data-tooltip={ tooltip }>
             <div className="form-autocomplete-input">
             <span className="mt-5" style={{display: "inline-block"}} >{ icon }</span>
             { tags }

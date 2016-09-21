@@ -5,7 +5,7 @@ import { getSetup } from "./setup";
 import { Provider } from "react-redux";
 import { setStatus, loading } from "./actions";
 import { store } from "./store";
-import { EAppStatus } from "constants/consts";
+import { EAppStatus } from "./constants/consts";
 import App  from "./components/App";
 
 

@@ -1,14 +1,9 @@
-import { EAppStatus } from "constants/consts";
-import * as ActionTypes from "constants/ActionTypes";
-import { WallabagSetup } from "./setup";
-import { WallabagApi, IWallabagArticle, ITag } from "./wallabag-api";
-import * as utils from "./utils";
-
-const setStatus = (status: EAppStatus, message: string): any => ({
-    type: ActionTypes.SET_STATUS,
-    appStatus: status,
-    message: message
-});
+import { EAppStatus } from "../constants/consts";
+import * as ActionTypes from "../constants/ActionTypes";
+import { WallabagSetup } from "../setup";
+import { WallabagApi, IWallabagArticle, ITag } from "../wallabag-api";
+import * as utils from "../utils";
+import { setStatus, loadApi, loadArticle, loadTags } from "./sync";
 
 function loading(setup: WallabagSetup) {
     return async function(dispatch: any, getState: any) {
@@ -44,32 +39,6 @@ function loading(setup: WallabagSetup) {
     };
 };
 
-const loadArticle = (article: IWallabagArticle): any => ({
-    type: ActionTypes.SET_ARTICLE,
-    article: article
-});
-
-const loadApi = (api: WallabagApi): any => ({
-    type: ActionTypes.SET_API,
-    api: api
-});
-
-const loadTags = ( tags: ITag[] ): any => ({
-    type: ActionTypes.SET_TAGS,
-    tags: tags
-});
-
-const toggleEditMode = ( ): any => ({
-    type: ActionTypes.TOGGLE_EDIT
-});
-
-const toggleHelpMode = ( ): any => ({
-    type: ActionTypes.TOGGLE_HELP
-});
-
-const toggleDeleteMode = ( ): any => ({
-    type: ActionTypes.TOGGLE_DELETE
-});
 
 function setTitle(title: string): any {
     return async function(dispatch: any, getState: any) {
@@ -180,8 +149,7 @@ const gotoArticlePage = (): any => {
      };
 };
 
-export { setStatus, loading, loadArticle, loadApi, loadTags,
-         toggleEditMode, toggleHelpMode, toggleDeleteMode,
+export { loading,
          setTitle, setTags, deleteTag, toggleStarred, toggleArchived,
          deleteArticle, gotoArticlePage, gotoOriginalPage
         }

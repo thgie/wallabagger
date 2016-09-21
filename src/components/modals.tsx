@@ -1,7 +1,7 @@
 ///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
 import { Confirm } from "./helpers";
-import * as Actions from "actions";
+import * as Actions from "../actions";
 import { connect } from "react-redux";
 
 
@@ -25,7 +25,7 @@ const ConfirmDelete_ = ({Active = false, onYesClick= null, onNoClick= null}: ICo
              onYesClick = { onYesClick }
              onNoClick = { onNoClick }  />;
 
-const ConfirmDelete = connect(mapStateToProps,mapDispatchToProps)(ConfirmDelete_);
+const ConfirmDelete = connect(mapStateToProps, mapDispatchToProps)(ConfirmDelete_);
 
 
 export { ConfirmDelete };

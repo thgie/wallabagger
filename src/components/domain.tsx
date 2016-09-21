@@ -3,15 +3,14 @@ import * as React from "react";
 import { IClassable, IClickable, Grey, Clickable, Tooltip } from "./helpers";
 import { connect } from "react-redux";
 import * as Actions  from "../actions";
-import * as Tootips from "constants/tooltips";
+import * as Tootips from "../constants/tooltips";
 
 interface IDomainProps extends React.Props<any>, IClassable, IClickable {
     helpMode: boolean;
     domainName: string;
 }
 
-function mapStateToProps (state: any)
-{
+function mapStateToProps (state: any) {
     return {
         domainName: state.article.domain_name,
         helpMode:  state.helpMode

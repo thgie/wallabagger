@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { ITag } from "../wallabag-api";
 import { TagsIcon } from "./icons";
 import * as H from "./helpers";
-import * as Actions  from "actions";
+import * as Actions  from "../actions";
 import * as Tooltips from "constants/tooltips";
 
 

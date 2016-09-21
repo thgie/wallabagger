@@ -26,10 +26,7 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ["", ".ts", ".tsx", ".js"],
-        alias: {
-        "constants": path.resolve('./src/constants')
-        }
+        extensions: ["", ".ts", ".tsx", ".js"]
     },
 
     module: {

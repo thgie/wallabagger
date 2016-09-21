@@ -1,8 +1,8 @@
-///<reference path="../../typings/index.d.ts" />
-import * as ActionTypes from "../constants/ActionTypes";
-import { EAppStatus } from "constants/consts";
-import { EmptySetup } from "../setup";
-import { WallabagApi, ITag } from "../wallabag-api";
+///<reference path="../typings/index.d.ts" />
+import * as ActionTypes from "./constants/ActionTypes";
+import { EAppStatus } from "./constants/consts";
+import { EmptySetup } from "./setup";
+import { WallabagApi, ITag } from "./wallabag-api";
 
 const INITIAL_STATE: any =  {
     appStatus: EAppStatus.unknown,

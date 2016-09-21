@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { IClassable, IClickable, BigBlue, Clickable, Tooltip, Text, Button } from "./helpers";
 import * as Actions  from "../actions";
-import * as Tootips from "constants/tooltips";
+import * as Tootips from "../constants/tooltips";
 
 interface ITitleProps extends React.Props<any>, IClickable, IClassable {
     title: string;

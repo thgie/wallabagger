@@ -15,13 +15,11 @@ const mapStateToProps =  (state: any) => {
 
 @ImgResponsive
 @CardImage
-class Picture extends  React.Component<IPictureProps,{}>  {
+class Picture extends  React.Component<IPictureProps, {}>  {
     render() {
         const { url, classes } = this.props;
-        return <img src={ url } className={ classes }/>; 
+        return <img src={ url } className={ classes }/>;
     }
 }
-        
-
 
 export default connect(mapStateToProps)(Picture);
