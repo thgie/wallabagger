@@ -37,6 +37,7 @@ export interface IWallabagArticle {
     content: string;
     created_at: Date;
     updated_at: Date;
+    annotations: any[];
     mimetype: string;
     reading_time: number;
     domain_name: string;
@@ -243,5 +244,6 @@ export class WallabagApi {
     //         .catch( error => { throw new Error(`Failed to get article ${entriesUrl}
     //             ${error.message}`);  } );
     // },
+
 
 }

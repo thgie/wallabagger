@@ -1,4 +1,3 @@
-///<reference path="../typings/index.d.ts" />
 import { createStore, applyMiddleware } from "redux";
 import rootReducer from "./reducers";
 import thunk from "redux-thunk";

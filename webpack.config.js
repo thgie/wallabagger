@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const path = require("path");
-
+const webpack = require("webpack");
 const loaders = require('./webpack/loaders');
 
 
@@ -28,14 +28,18 @@ module.exports = {
     },
 
     resolve: {
+        modules: [
+            path.resolve("./src"),
+            "node_modules"
+        ],
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ["", ".ts", ".tsx", ".js"]
+        extensions: [".ts", ".tsx", ".js"]
     },
 
     module: {
-        preLoaders: [
-            loaders.tslint,
-        ],
+        // preLoaders: [
+        //     loaders.tslint,
+        // ],
         loaders: [
             loaders.tsx,
             loaders.css,
@@ -57,6 +61,11 @@ module.exports = {
         "react-dom": "ReactDOM"
     },
     plugins: [
+        new webpack.DefinePlugin({
+            __DEV__: process.env.NODE_ENV !== 'production',
+            __TEST__: JSON.stringify(process.env.TEST || false),
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        }),
         new ExtractTextPlugin("styles.css"),
         new HtmlWebpackPlugin({
             inject: 'body',

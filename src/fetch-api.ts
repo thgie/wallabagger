@@ -1,14 +1,3 @@
-function checkStatus(response: Response): Promise<any> {
-    if (response.status >= 200 && response.status < 300) {
-        return Promise.resolve(response);
-    };
-    return Promise.reject(response.json());
-}
-
-function getJson(j: any) {
-    return j.json();
-}
-
 function getRequestOptions(rmethod: string, rheaders: Headers, content: BodyInit): RequestInit {
 
     let options: RequestInit = {
@@ -45,22 +34,22 @@ function getAuhorizedHeaders(token: string): Headers {
 export function Patch(url: string, token: string, data: Object): Promise<any> {
     let content: BodyInit = JSON.stringify(data);
     let rinit = getRequestOptions("PATCH", getAuhorizedHeaders(token), content);
-    return fetch(url, rinit).then(checkStatus).then(getJson);
+    return fetch(url, rinit).then(response => response.ok ? response.json() : response.json().then(err => Promise.reject(err)));
 }
 
 export function Post(url: string, token: string, data: Object): Promise<any> {
     console.log(`Post ${url}`);
     let content: BodyInit = JSON.stringify(data);
     let rinit = getRequestOptions("POST", token === "" ? getNotAuhorizedHeaders() : getAuhorizedHeaders(token), content);
-    return fetch(url, rinit).then(checkStatus).then(getJson);
+    return fetch(url, rinit).then(response => response.ok ? response.json() : response.json().then(err => Promise.reject(err)));
 }
 
 export function Delete(url: string, token: string): Promise<any> {
     let rinit = getRequestOptions("DELETE", getAuhorizedHeaders(token), "");
-    return fetch(url, rinit).then(checkStatus).then(getJson);
+    return fetch(url, rinit).then(response => response.ok ? response.json() : response.json().then(err => Promise.reject(err)));
 }
 
 export function Get(url: string, token: string): Promise<any> {
     let rinit = getRequestOptions("GET", token === "" ? getNotAuhorizedHeaders() : getAuhorizedHeaders(token), "");
-    return fetch(url, rinit).then(checkStatus).then(getJson);
+    return fetch(url, rinit).then(response => response.ok ? response.json() : response.json().then(err => Promise.reject(err)));
 }

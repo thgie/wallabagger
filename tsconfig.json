@@ -5,10 +5,12 @@
         "noImplicitAny": true,
         "target": "ES6",
         "jsx": "react",
-        "experimentalDecorators": true
-        },
+        "experimentalDecorators": true,
+        "strictNullChecks": false,
+        "moduleResolution": "node",
+        "baseUrl": "./src"
+                },
     "files": [
-        "./typings/index.d.ts",
         "./src/index.tsx"
     ]
 

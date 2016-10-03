@@ -1,10 +1,8 @@
-///<reference path="../../typings/index.d.ts" />
 import * as React from "react";
 import { connect } from "react-redux";
-import { ITag } from "../wallabag-api";
-import { TagsIcon } from "./icons";
-import * as H from "./helpers";
-import * as Actions  from "../actions";
+import { ITag } from "wallabag-api";
+import { TagsIcon } from "components/themes";
+import * as Actions  from "actions";
 import * as Tooltips from "constants/tooltips";
 
 
@@ -15,58 +13,10 @@ interface ITagProps extends React.Props<any> {
     onDelete?: (tagId: number) => void;
 }
 
-interface ITagPackProps extends React.Props<any> {
-    articleTags: ITag[];
-    allTags: ITag[];
-    helpMode: boolean;
-    onSaveTags: (tags: string) => void;
-    onDeleteTag: (tagId: number) => void;
-}
-
-
-function mapStateToPropsTags (state: any) {
-    return {
-        articleTags: state.article.tags,
-        allTags: state.tags,
-        helpMode: state.helpMode
-    };
-};
-
-function mapDispatchToPropsTags (dispatch: any) {
-    return {
-                onSaveTags: (tags: string) => {dispatch(Actions.setTags(tags)); },
-                onDeleteTag: (tagId: number) => {dispatch(Actions.deleteTag(tagId)); }
-        };
-}
-
-const TagsPck = ({  articleTags = [], allTags = [], helpMode = false,
-                    onSaveTags = null, onDeleteTag = null  }: ITagPackProps) =>
-        <Tags articleTags={ articleTags }
-              allTags={ allTags }
-              helpMode={ helpMode }
-              onSaveTags = { onSaveTags }
-              onDeleteTag={ onDeleteTag }/>;
-
-
-const TagsPack = connect(mapStateToPropsTags, mapDispatchToPropsTags)(TagsPck);
-
-class Tag extends React.Component<ITagProps, {}> {
-
-    onclick = (e: React.MouseEvent) => {
-        if ( (this.props.onClick !== null) && (this.props.onClick !== undefined) )
-            this.props.onClick(this.props.tag.id);
-    }
-
-    deleteClick = (e: MouseEvent) => {
-        this.props.onDelete(this.props.tag.id);
-    }
-    render() {
-        const { tag, closable } = this.props;
-        return <H.Clickable_ onClick={ this.onclick }>
-            <H.Chip>{tag.label}{ closable ? <H.Cross onClick={this.deleteClick}/> : null }</H.Chip>
-        </H.Clickable_> ;
-    }
-}
+const Tag = ({ tag = null, closable = false, onClick = null, onDelete = null }: ITagProps) =>
+     <span className="chip-sm chip-name" onClick = { () => { onClick(tag.id); } }>
+        {tag.label}{ closable ? <button className="btn btn-clear" onClick = { () => { onDelete(tag.id); } } /> : null }
+     </span>;
 
 interface ITagsProps extends React.Props<any> {
     articleTags: ITag[];
@@ -92,7 +42,6 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
         this.onchange = this.onchange.bind(this);
         this.onkeydown = this.onkeydown.bind(this);
         this.onfoundTagClick = this.onfoundTagClick.bind(this);
-        this.ondeletetag = this.ondeletetag.bind(this);
         this.saveHtml = this.saveHtml.bind(this);
     }
 
@@ -101,8 +50,8 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
         return param.replace(/[<'&">]/g, symb => map[symb]);
     }
 
-    onchange(e: Event) {
-       const inputValue = (e.currentTarget as HTMLInputElement).value ;
+    onchange(e: any) {
+       const inputValue = (this.refs["input"] as HTMLInputElement).value ;
        const lastChar = inputValue.slice(-1);
        if ( (lastChar !== ",") && (lastChar !== ";") && (lastChar !== " ") ) {
            this.setState( Object.assign(this.state,
@@ -123,7 +72,8 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
                .indexOf(tag) !== -1 );
     }
 
-    onkeydown(e: KeyboardEvent) {
+    onkeydown(event: any) {
+        const e = (event as KeyboardEvent);
         const keyCode = e.keyCode;
         const key = e.key;
         const element = (e.currentTarget as HTMLInputElement);
@@ -152,37 +102,38 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
         const tsrt: string =  `${this.props.articleTags.map(tag => tag.label).join(",")},${ftag.label}`;
         this.props.onSaveTags(tsrt);
     }
-
-    ondeletetag(id: number) {
-        //    this.setState( Object.assign(this.state,
-        //    { tagsSrt: `${this.props.articleTags.map(tag => tag.label).join(",")}${inputValue === "" ? "" :","}${inputValue}`,
-        //     foundTags: this.props.allTags.filter(tag =>
-        //               ( this.props.articleTags.map(t => t.id).indexOf(tag.id) === -1 )
-        //           &&  ( inputValue.length >= 3 && tag.label.indexOf(inputValue) !== -1)
-        //           || (inputValue === tag.label) && ( ! this.tagExists(inputValue) )
-        //     )
-        //       }) );
-                }
-
+    deleteTag = (id: number) => {
+        this.props.onDeleteTag(id);
+    }
     render() {
         const { foundTags } = this.state;
         const { articleTags, onDeleteTag, helpMode  } = this.props;
-        return  <H.FormAutocompleteTags
-                    tooltip={ helpMode ? Tooltips.TAGS_TOOLTIP : ""}
-                    icon= {<TagsIcon />}
-                    tags={ articleTags.map(tag =>
-                                            <Tag tag={tag}
-                                                 closable={true}
-                                                 key={tag.id}
-                                                 onDelete={ onDeleteTag }/>
-                                          ) }
-                    foundTags = {(foundTags === null) || ( foundTags.length === 0) ? null
-                         : foundTags.map(tag => <Tag tag={tag} closable={false}  key={tag.id} onClick={this.onfoundTagClick}/>) }
-                    placeholder= "type tags here"
-                    onChange = {this.onchange}
-                    onKeyDown = {this.onkeydown}
-                />;
+        return  <div className={["form-autocomplete", "md-10", helpMode ? "tooltip" :""].join(" ")}  data-tooltip={ helpMode ? Tooltips.TAGS_TOOLTIP : "" }>
+                    <div className="form-autocomplete-input">
+                    <span className="mt-5" style={{display: "inline-block"}} ><TagsIcon /></span>
+                    { articleTags.map(tag => <Tag tag={tag}
+                                                closable={true}
+                                                key={tag.id}
+                                                onDelete={ this.deleteTag }/>
+                                                ) }
+                    <input className="form-input"
+                        type="text"
+                        placeholder="type tags here"
+                        onChange = { this.onchange }
+                        onKeyDown={ this.onkeydown }
+                        ref="input"/>
+                        {
+                            (foundTags === null) || ( foundTags.length === 0) ? null :
+                            <ul className="form-autocomplete-list">
+                                <span className="mt-5" style={{display: "inline-block"}} >
+                                    <span className="float-left card-meta">Tags found:</span>
+                                </span>
+                                {foundTags}
+                            </ul>
+                        }
+                        </div>
+                </div>;
     }
 };
 
-export { TagsPack }
+export { Tags }

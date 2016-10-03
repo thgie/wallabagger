@@ -1,40 +1,72 @@
-import { EAppStatus } from "../constants/consts";
-import * as ActionTypes from "../constants/ActionTypes";
-import { WallabagSetup } from "../setup";
-import { WallabagApi, IWallabagArticle, ITag } from "../wallabag-api";
-import * as utils from "../utils";
-import { setStatus, loadApi, loadArticle, loadTags } from "./sync";
+import { EAppStatus } from "./constants/consts";
+import * as ActionTypes from "./constants/ActionTypes";
+import { WallabagSetup } from "./setup";
+import { WallabagApi, IWallabagArticle, ITag } from "./wallabag-api";
+import * as utils from "./utils";
+import { mockArticle, mockTags } from "./mocks";
+
+declare const __DEV__: boolean; // from webpack
+
+const setStatus = (status: EAppStatus, message: string): any => ({
+    type: ActionTypes.SET_STATUS,
+    appStatus: status,
+    message: message
+});
+
+const loadArticle = (article: IWallabagArticle): any => ({
+    type: ActionTypes.SET_ARTICLE,
+    article: article
+});
+
+const loadApi = (api: WallabagApi): any => ({
+    type: ActionTypes.SET_API,
+    api: api
+});
+
+const loadTags = ( tags: ITag[] ): any => ({
+    type: ActionTypes.SET_TAGS,
+    tags: tags
+});
 
 function loading(setup: WallabagSetup) {
-    return async function(dispatch: any, getState: any) {
+    return async function (dispatch: any, getState: any) {
         try {
 
             dispatch(setStatus(EAppStatus.info, "Setting API"));
             await setup.load();
-            const api = new WallabagApi( setup );
-            dispatch( loadApi( api ) );
+            const api = new WallabagApi(setup);
+            dispatch(loadApi(api));
 
-            if (api.needNewAppToken) {
-                dispatch(setStatus(EAppStatus.info, "Obtaining new API token"));
-                await api.getAppToken();
-                dispatch(setStatus(EAppStatus.info, "Saving setup"));
-                await api.setup.save();
+
+            if (__DEV__) {
+                dispatch(loadArticle(mockArticle));
+                dispatch(setStatus(EAppStatus.article, ""));
+                dispatch(loadTags(mockTags));
+            }
+            else {
+
+                if (api.needNewAppToken) {
+                    dispatch(setStatus(EAppStatus.info, "Obtaining new API token"));
+                    await api.getAppToken();
+                    dispatch(setStatus(EAppStatus.info, "Saving setup"));
+                    await api.setup.save();
+                }
+
+                dispatch(setStatus(EAppStatus.info, "Get page URL to save"));
+                const url = await utils.getUrlToSave();
+
+                dispatch(setStatus(EAppStatus.info, "Saving page to wallabag"));
+                const article = await api.savePage(url);
+
+                dispatch(loadArticle(article));
+                dispatch(setStatus(EAppStatus.article, ""));
+
+                const tags = await getState().api.GetTags();
+                dispatch(loadTags(tags));
             }
 
-            dispatch(setStatus(EAppStatus.info, "Get page URL to save"));
-            const url = await utils.getUrlToSave();
-
-            dispatch(setStatus(EAppStatus.info, "Saving page to wallabag"));
-            const article = await api.savePage(url);
-
-            dispatch(loadArticle(article));
-            dispatch(setStatus(EAppStatus.article, ""));
-
-            const tags = await getState().api.GetTags();
-            dispatch(loadTags(tags));
-
         } catch (error) {
-                    dispatch(setStatus(EAppStatus.error, `Error: ${error.message}`));
+            dispatch(setStatus(EAppStatus.error, `Error: ${error.message}`));
         }
     };
 };
@@ -120,6 +152,8 @@ function deleteArticle(): any {
     };
 };
 
+// const gtO = (): any => dispatch();
+
 const gotoOriginalPage = (): any => {
     return (dispatch: any, getState: any) => {
        const article = ( getState().article as IWallabagArticle);
@@ -149,7 +183,7 @@ const gotoArticlePage = (): any => {
      };
 };
 
-export { loading,
+export { setStatus, loadArticle, loadApi, loadTags, loading,
          setTitle, setTags, deleteTag, toggleStarred, toggleArchived,
          deleteArticle, gotoArticlePage, gotoOriginalPage
         }
