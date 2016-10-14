@@ -9,6 +9,7 @@ import { Card, Block,
          HelpIcon, EditIcon, TrashIcon, ArchiveIcon, StarredIcon,
          Tags, ConfirmDelete } from "./themes";
 
+import "css/popup.css";
 
 interface  IArticleProps extends React.Props<any> {
     article: IWallabagArticle;

@@ -183,7 +183,23 @@ const gotoArticlePage = (): any => {
      };
 };
 
-export { setStatus, loadArticle, loadApi, loadTags, loading,
+function loadingSetup(setup: WallabagSetup) {
+    return async function (dispatch: any, getState: any) {
+        try {
+
+            dispatch(setStatus(EAppStatus.info, "Setting API"));
+            await setup.load();
+            const api = new WallabagApi(setup);
+            dispatch(loadApi(api));
+            dispatch(setStatus(EAppStatus.options, ""));
+
+        } catch (error) {
+            dispatch(setStatus(EAppStatus.error, `Error: ${error.message}`));
+        }
+    };
+};
+
+export { setStatus, loadArticle, loadApi, loadTags, loading, loadingSetup,
          setTitle, setTags, deleteTag, toggleStarred, toggleArchived,
          deleteArticle, gotoArticlePage, gotoOriginalPage
         }

@@ -1,7 +1,8 @@
 import * as React from "react";
 import * as Tooltips from "constants/tooltips";
-
 import { IClickable, ITooltipped } from "../interfaces";
+
+import "css/icomoon.css";
 
 interface IIconProps extends React.Props<any>, IClickable, ITooltipped {};
 

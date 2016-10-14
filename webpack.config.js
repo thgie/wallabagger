@@ -8,7 +8,7 @@ const loaders = require('./webpack/loaders');
 module.exports = {
     entry: { 
         app: "./src/index.tsx",
-        opt: "./src/options.js"
+        opt: "./src/options.tsx"
     },
     output: {
         path: 'dist',
@@ -80,7 +80,7 @@ module.exports = {
             chunks: ['opt'],
             filename: 'options.html',
             hash: true,
-            template: './src/options.html',
+            template: './src/index.html',
             favicon: './src/favicon.ico'
         }),
         ]

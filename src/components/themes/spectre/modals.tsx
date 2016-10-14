@@ -2,7 +2,6 @@ import * as React from "react";
 import * as Actions from "actions";
 import { connect } from "react-redux";
 
-
 interface IConfirmDeleteProps extends React.Props<any> {
     Active: boolean;
     onYesClick: () => void;

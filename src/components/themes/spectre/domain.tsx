@@ -3,6 +3,7 @@ import { IClickable, ITooltipped } from "../interfaces";
 import { connect } from "react-redux";
 import * as Tootips from "constants/tooltips";
 
+
 interface IDomainProps extends React.Props<any>, IClickable, ITooltipped {
     domainName: string;
 }

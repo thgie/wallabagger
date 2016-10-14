@@ -11,7 +11,8 @@
         "baseUrl": "./src"
                 },
     "files": [
-        "./src/index.tsx"
+        "./src/index.tsx",
+        "./src/options.tsx"
     ]
 
 }

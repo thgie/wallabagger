@@ -1,1 +1,1 @@
-export enum EAppStatus { unknown, info, error, article };
+export enum EAppStatus { unknown, info, error, article, options };

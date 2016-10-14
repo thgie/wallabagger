@@ -1,4 +1,6 @@
-body {
+
+/* body for just card*/
+body.app {
     width: 450px;
     overflow: hidden;
     padding: 3px;

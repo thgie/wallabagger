@@ -6,3 +6,6 @@ export * from "./tags";
 export * from "./modals";
 export * from "./card";
 export * from "./toast";
+export * from "./optionspage";
+
+import "css/spectre.min.css";
