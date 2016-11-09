@@ -10,7 +10,8 @@ exports.tslint = {
 
 exports.tsx = {
   test: /\.tsx?$/,
-  loader:  'ts-loader',
+  //loader:  'ts-loader',
+  loader:  'awesome-typescript-loader',
   exclude: /node_modules/,
 };
 
