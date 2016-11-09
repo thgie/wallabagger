@@ -1,4 +1,3 @@
-///<reference path="../typings/index.d.ts" />
 import { isExtension, isDebug } from "./utils";
 
 export interface IWallabagSetup {

@@ -1,4 +1,3 @@
-///<reference path="../typings/index.d.ts" />
 import { IWallabagSetup, WallabagSetup } from "./setup";
 import { Get, Post, Patch, Delete } from "./fetch-api";
 

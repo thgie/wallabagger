@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --progress -d",
-    "start": "webpack -d && http-server dist -o \"C:\\Users\\yevdokimov\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome.exe\"",  
+    "start": "webpack -d && http-server dist -o \"C:\\Users\\yevdokimov\\AppData\\Local\\Google\\Chrome SxS\\Application\\chrome.exe\"",
     "lint-ts": "tslint \"*.tsx\" \"*.ts\" \"src/**/*.tsx\" \"src/**/*.ts\" "
   },
   "repository": {
@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@types/bluebird": "^3.0.33",
+    "@types/chrome": "0.0.35",
     "@types/react": "^0.14.37",
     "@types/react-dom": "^0.14.17",
     "@types/react-redux": "^4.4.32",

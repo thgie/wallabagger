@@ -8,7 +8,12 @@ interface IOptionPageProps extends React.Props<any> {
     setup: IWallabagSetup;
 }
 
-const OptionsPage = ({ setup = null }: IOptionPageProps) =>
+const mapStateToProps = (state: any) => {
+    return {
+        setup: state.api.setup
+    };
+};
+const OptionsPage_ = ({ setup = null }: IOptionPageProps) =>
     <div className="columns">
         <div className="column col-6">
             <h2>Wallabagger options</h2>
@@ -18,16 +23,16 @@ const OptionsPage = ({ setup = null }: IOptionPageProps) =>
                     <div className="form-group">
                         <label className="form-label" htmlFor="input-wallabagurl">Wallabag URL</label>
                         <div className="input-group">
-                            <span className="input-group-addon" id="input-group-wallabagurl">http:// </span>
-                            <input defaultValue={ setup.Url } className="form-input" type="text" id="input-wallabagurl" placeholder="Wallabag URL" />
-                            <button className="btn input-group-btn" id="checkurl-button">Check URL</button>
+                            <span className="input-group-addon">http:// </span>
+                            <input defaultValue={ setup.Url } className="form-input" type="text" placeholder="Wallabag URL" />
+                            <button className="btn input-group-btn">Check URL</button>
                         </div>
                     </div>
 
 
                     <div className="form-group">
                         <label className="form-switch">
-                            <input type="checkbox" id="protocol-checkbox"/>
+                            <input type="checkbox" />
                             <i className="form-icon"></i> Use HTTPS
                         </label>
                     </div>
@@ -70,4 +75,4 @@ const OptionsPage = ({ setup = null }: IOptionPageProps) =>
         </div>
     </div>;
 
-export { OptionsPage }
+export const OptionsPage = connect(mapStateToProps)(OptionsPage_);

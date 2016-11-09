@@ -24,7 +24,7 @@ const App: React.StatelessComponent< IAppProps> = ({ appStatus = EAppStatus.unkn
                     { appStatus === EAppStatus.article && <Article /> }
                     { appStatus === EAppStatus.info && <ToastInfo text = { message }/> }
                     { appStatus === EAppStatus.error && <ToastError text = { message }/> }
-                    { appStatus === EAppStatus.options && <OptionsPage setup={ setup }/> }
+                    { appStatus === EAppStatus.options && <OptionsPage /> }
                </div>;
     };
 
