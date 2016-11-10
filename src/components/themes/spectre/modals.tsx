@@ -9,12 +9,14 @@ interface IConfirmDeleteProps extends React.Props<any> {
 }
 
 const ConfirmDelete = ({Active = false, onYesClick= null, onNoClick= null}: IConfirmDeleteProps) =>
-    <Confirm title="Please confirm delete"
-             question="Are you sure?"
+    <Confirm title="Delete article?"
+             question="Deleting removes article permanently"
              YesNo={false}
              Active = {Active}
              onYesClick = { onYesClick }
-             onNoClick = { onNoClick }  />;
+             onNoClick = { onNoClick }
+             YesText = "Yes, delete it"
+             NoText = "No, leave it"  />;
 
 interface IConfirmProps extends React.Props<any> {
     title: string;
@@ -23,6 +25,8 @@ interface IConfirmProps extends React.Props<any> {
     Active: boolean;
     onYesClick: () => void;
     onNoClick: () => void;
+    YesText?: string;
+    NoText?: string;
 }
 
 export const Confirm = ({
@@ -31,7 +35,9 @@ export const Confirm = ({
     YesNo = false,
     Active = false,
     onYesClick = null,
-    onNoClick = null
+    onNoClick = null,
+    YesText = "Yes",
+    NoText = "No"
 }: IConfirmProps) =>
 
      <div className={ Active ? "modal modal-sm active" : "modal modal-sm" }>
@@ -52,12 +58,12 @@ export const Confirm = ({
 
             { YesNo
                 ? <div className="modal-footer">
-                        <button className="btn btn-primary" onClick={onYesClick}>Yes</button>
-                        <button  className="btn btn-link" onClick={onNoClick}>No</button>
+                        <button className="btn btn-primary" onClick={onYesClick}>{YesText}</button>
+                        <button  className="btn btn-link" onClick={onNoClick}>{NoText}</button>
                 </div>
                 : <div className="modal-footer">
-                        <button  className="btn btn-link" onClick={onYesClick}>Yes</button>
-                        <button  className="btn btn-primary"onClick={onNoClick}>No</button>
+                        <button  className="btn btn-link" onClick={onYesClick}>{YesText}</button>
+                        <button  className="btn btn-primary"onClick={onNoClick}>{NoText}</button>
                 </div>
                 }
 
