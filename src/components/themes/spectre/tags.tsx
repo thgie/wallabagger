@@ -58,7 +58,7 @@ class Tags extends React.Component<ITagsProps, ITagsState> {
            { tagsSrt: `${this.props.articleTags.map(tag => tag.label).join(",")}${inputValue === "" ? "" :","}${inputValue}`,
             foundTags: this.props.allTags.filter(tag =>
                       ( this.props.articleTags.map(t => t.id).indexOf(tag.id) === -1 )
-                  &&  ( this.state.search.length >= 3 && tag.label.indexOf(this.state.search) !== -1)
+                  &&  ( this.state.search.length >= 3 && tag.label.toUpperCase().indexOf(this.state.search.toUpperCase()) !== -1)
                   || (this.state.search === tag.label) && ( ! this.tagExists(this.state.search) )
                 //   &&  ( inputValue.length >= 3 && tag.label.indexOf(inputValue) !== -1)
                 //   || (inputValue === tag.label) && ( ! this.tagExists(inputValue) )
