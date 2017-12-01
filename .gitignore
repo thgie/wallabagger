@@ -3,3 +3,5 @@ jsconfig.json
 .vscode/
 node_modules
 yarn-error.log
+build
+publish
