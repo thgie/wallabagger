@@ -43,43 +43,6 @@ CacheType.prototype = {
     }
 };
 
-const wallabagContextMenus = [
-    {
-        id: 'wallabagger-add-link',
-        title: Common.translate('Wallabag_it'),
-        contexts: ['link', 'page']
-    },
-    {
-        type: 'separator',
-        contexts: ['browser_action']
-    },
-    {
-        id: 'unread',
-        title: Common.translate('Unread'),
-        contexts: ['browser_action']
-    },
-    {
-        id: 'starred',
-        title: Common.translate('Starred'),
-        contexts: ['browser_action']
-    },
-    {
-        id: 'archive',
-        title: Common.translate('Archive'),
-        contexts: ['browser_action']
-    },
-    {
-        id: 'all',
-        title: Common.translate('All_entries'),
-        contexts: ['browser_action']
-    },
-    {
-        id: 'tag',
-        title: Common.translate('Tags'),
-        contexts: ['browser_action']
-    }
-];
-
 const existStates = {
     exists: 'exists',
     notexists: 'notexists',
@@ -103,13 +66,8 @@ api.init().then(data => {
 });
 
 addListeners();
-createContextMenus();
 
 // Functions
-function createContextMenus () {
-    wallabagContextMenus.map(menu => { browser.contextMenus.create(menu); });
-}
-
 function onTabActivatedListener (activeInfo) {
     browserIcon.set('default');
     const { tabId } = activeInfo;
@@ -144,35 +102,6 @@ function addExistCheckListeners (enable) {
         if (browser.tabs && browser.tabs.onUpdated.hasListener(onTabUpdatedListener)) {
             browser.tabs.onUpdated.removeListener(onTabUpdatedListener);
         }
-    }
-}
-
-function onContextMenusClicked (info) {
-    switch (info.menuItemId) {
-        case 'wallabagger-add-link':
-            if (typeof (info.linkUrl) === 'string' && info.linkUrl.length > 0) {
-                savePageToWallabag(info.linkUrl, true);
-            } else {
-                savePageToWallabag(info.pageUrl, false);
-            }
-            break;
-        case 'unread':
-        case 'starred':
-        case 'archive':
-        case 'all':
-        case 'tag':
-            GotoWallabag(info.menuItemId);
-            break;
-    }
-}
-
-function onCommandsCommand (command) {
-    if (command === 'wallabag-it') {
-        browser.tabs.query({ 'active': true, 'currentWindow': true }, function (tabs) {
-            if (tabs[0] != null) {
-                savePageToWallabag(tabs[0].url, false);
-            }
-        });
     }
 }
 
@@ -306,8 +235,6 @@ function onRuntimeConnect (port) {
 }
 
 function addListeners () {
-    browser.contextMenus.onClicked.addListener(onContextMenusClicked);
-    browser.commands.onCommand.addListener(onCommandsCommand);
     browser.runtime.onConnect.addListener(onRuntimeConnect);
 }
 
@@ -454,8 +381,6 @@ function savePageToWallabag (url, resetIcon) {
                 throw error;
             });
 };
-
-const GotoWallabag = (part) => api.checkParams() && browser.tabs.create({ url: `${api.data.Url}/${part}/list` });
 
 const checkExist = (url) => {
     if (isServicePage(url)) { return; }
