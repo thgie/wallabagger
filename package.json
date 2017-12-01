@@ -9,7 +9,7 @@
     "Edge > 14"
   ],
   "scripts": {
-    "eslint": "eslint wallabagger/js/*"
+    "eslint": "eslint source/js/*"
   },
   "repository": {
     "type": "git",
