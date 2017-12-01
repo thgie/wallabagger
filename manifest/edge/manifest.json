@@ -1,18 +1,19 @@
 {
     "manifest_version": 2,
     "name": "wallabagger",
+    "default_locale": "en",
     "version": "1.4.4.2",
     "author": "Yuriy Evdokimov, Simon Alberny",
     "description": "__MSG_Extension_description__",
     "icons": {
-        "16": "images/wallabagger-16ou.png",
-        "48": "images/wallabagger-48ou.png"
+        "16": "img/wallabagger-16ou.png",
+        "48": "img/wallabagger-48ou.png"
     },
 
     "browser_action": {
         "default_icon": {
-        "20":  "images/wallabagger-20ou.png",
-        "40":  "images/wallabagger-40ou.png"
+        "20":  "img/wallabagger-20ou.png",
+        "40":  "img/wallabagger-40ou.png"
         },
         "default_title": "This is popup title",
         "default_popup": "popup.html"
