@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "wallabagger",
-    "version": "1.4.1.1",
+    "version": "1.4.4.2",
     "author": "Yuriy Evdokimov, Simon Alberny",
     "description": "__MSG_Extension_description__",
     "icons": {
