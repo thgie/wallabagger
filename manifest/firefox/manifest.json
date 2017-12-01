@@ -1,0 +1,62 @@
+{
+    "manifest_version": 2,
+    "name": "wallabagger",
+    "version": "1.4.1.1",
+    "author": "Yuriy Evdokimov, Simon Alberny",
+    "description": "__MSG_Extension_description__",
+    "icons": {
+        "16": "images/wallabagger-16.png",
+        "48":  "images/wallabagger-48.png",
+        "96": "images/wallabagger-96.png",
+        "128": "images/wallabagger-128.png"
+    },
+
+    "page_action": {
+        "browser_style": true,
+        "default_icon": {
+        "19":  "images/wallabagger-19.png",
+        "38":  "images/wallabagger-38.png"
+        },
+        "default_title": "Wallabagger",
+        "default_popup": "popup.html"
+    },
+
+   "options_ui": {
+       "page": "options.html"
+    },
+
+    "background": {
+        "scripts": [ 
+            "js/common.js", 
+            "js/fetch-api.js", 
+            "js/wallabag-api.js", 
+            "js/background.js" , 
+            "js/command.js", 
+            "js/menus.js"
+        ]
+    },
+    "permissions": [
+        "*://*/",
+        "tabs",
+        "storage",
+        "contextMenus"
+    ],
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+              "default": "Alt+W",
+              "windows": "Alt+W",
+              "mac": "Alt+W"
+            }
+        },
+        "wallabag-it": {
+            "suggested_key": {
+              "default": "Alt+Shift+W",
+              "windows": "Alt+Shift+W",
+              "mac": "Alt+Shift+W"
+            },
+            "description": "__MSG_Wallabag_it_description__"
+        }
+    }
+
+}
