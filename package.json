@@ -10,12 +10,14 @@
   ],
   "scripts": {
     "eslint": "eslint source/js/*",
-    "build-chrome": "bin/build chrome",
-    "build-firefox": "bin/build firefox",
-    "build-edge": "bin/build edge",
-    "build-all": "bin/buildall",
-    "publish-chrome": "bin/publish chrome",
-    "publish-edge": "bin/publish edge"
+    "build:chrome": "bin/build chrome",
+    "build:firefox": "bin/build firefox",
+    "build:edge": "bin/build edge",
+    "build:all": "bin/buildall",
+    "publish:chrome": "bin/publish chrome",
+    "publish:edge": "bin/publish edge",
+    "publish:opera": "bin/publish opera",
+    "publish:firefox": "bin/publish firefox"
   },
   "repository": {
     "type": "git",

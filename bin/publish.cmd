@@ -5,6 +5,7 @@ If Not Defined t GOTO END
 If %1==chrome  GOTO WORK
 If %1==firefox GOTO WORK
 If %1==edge    GOTO WORK
+If %1==opera  GOTO WORK
 GOTO END
 
 :WORK
@@ -14,6 +15,8 @@ rd /S /Q publish\%target%
 md publish\%target%
 If %1==edge    GOTO EDGE
 If %1==chrome  GOTO CHROME
+If %1==firefox  GOTO FIREFOX
+If %1==opera  GOTO OPERA
 GOTO END
 
 :EDGE
@@ -26,8 +29,20 @@ xcopy /E /Y build\%target%\*.* publish\%target%\Extension
 GOTO END
 
 :CHROME
-call bin\pack.cmd
+call bin\pack.cmd chrome
+move publish\wallabagger.zip publish\chrome
 GOTO END
+
+:FIREFOX
+call bin\packcrx.cmd firefox wallabagger.pem
+move build\firefox.crx publish/firefox/wallabagger.crx
+GOTO :END
+
+:OPERA
+call bin\packcrx.cmd chrome wallabagger.pem
+move build\chrome.crx publish/opera/wallabagger.nex
+GOTO :END
+
 
 :END
 echo end publishing
